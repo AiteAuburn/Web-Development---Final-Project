@@ -2,14 +2,21 @@ a {
   text-decoration: none;
   color: black;
 }
+body {
+  margin: 0;
+}
 .container{
   width:480px;
   margin: 0 auto;
+  padding: 25px;
+  border: 1px solid #ced4da;
 }
 .text-center {
-    text-align: center!important;
+  text-align: center!important;
 }
 input {
+}
+input[type=text], input[type=password]{
   display: block;
   margin: 0;
   width: 100%;
@@ -20,12 +27,20 @@ input {
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
-}
-input[type=text], input[type=password]{
   border: 0px;
   border-bottom: 1px solid #ced4da;
 }
 input[type=submit]{
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding-left: .75rem;
+  border-radius: .25rem;
+  background-color: #fff;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
   height: calc(1.5em + .75rem + 12px);
   margin-top: 15px;
   margin-bottom: 15px;
@@ -44,6 +59,10 @@ input[type=text]:focus {
   color: white;
   cursor: pointer;
 }
+.btn.full-width{
+  width:100%;
+  display:block;
+}
 .page-title{
 
 }
@@ -55,4 +74,30 @@ input[type=text]:focus {
 .errorMsg{
   color: red;
   padding: 15px 0 15px 0;
+}
+.nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.nav-link {
+    display: block;
+    padding: .5rem 1rem;
+}
+.nav-fill .nav-item {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  text-align: center;
+}
+.nav-item.active {
+  border-bottom: 1px solid #333333;
+}
+textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 150px;
 }

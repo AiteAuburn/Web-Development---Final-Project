@@ -22,6 +22,12 @@ public class UserService {
   private String connectionStr = "jdbc:mysql://" + DBCONFIG.HOST + "/aite?"
       + "user=" + DBCONFIG.USER + "&password=" + DBCONFIG.PWD;
   
+  public int checkToken(String accessToken) {
+    return 1;
+  }
+  public int editService(String accessToken, String title, int price, String description, boolean enabled) {
+    return 0;
+  }
   public int login(String username, String pwd) {
     int errorCode = 0;
 	try {

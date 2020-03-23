@@ -7,5 +7,10 @@
 		<title>Questions</title>
 	</head>
 	<body>
+    <div class="container">
+      <h1 class="page-title text-center">Web Development</h1>
+      <button class="btn full-width" onclick="window.location.href='${pageContext.request.contextPath}/login'">Login</button>
+      <button class="btn full-width" onclick="window.location.href='${pageContext.request.contextPath}/register'">Register</button>
+    </div>
 	</body>
 </html>
