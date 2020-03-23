@@ -7,12 +7,22 @@
     <title>Login</title>
   </head>
   <body>
+    <div class="container">
+    <a href="${pageContext.request.contextPath}"><h1>&larr;</h1></a>
+      <h1 class="page-title">Login</h1>
       <form action="login" method="post">
-			  <label for="account">Account:</label><br>
-			  <input type="text" name="username" value="admin"><br>
-			  <label for="pwd">Password:</label><br>
-			  <input type="text" name="pwd" value="admin"><br><br>
-        <input type="submit" value="Submit"/>
+        <h5 class="label">Account</h5>
+			  <input type="text" name="username" value="admin">
+        <h5 class="label">Password</h5>
+        <input type="password" name="pwd" value="admin" placeholder="Password" >
+	      <% 
+	      String errorMsg = (String) request.getAttribute("errorMsg");
+	      if(errorMsg.length() > 0) {
+	        out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
+	      }
+	      %>
+        <input type="submit" value="Continue"/>
       </form>
+    </div>
   </body>
 </html>

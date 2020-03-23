@@ -4,3 +4,4 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/aite.css">

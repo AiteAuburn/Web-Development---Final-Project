@@ -7,12 +7,26 @@
     <title>Register</title>
   </head>
   <body>
-      <form action="login" method="post">
-			  <label for="fname">Account:</label><br>
-			  <input type="text" id="fname" name="fname" value="admin"><br>
-			  <label for="lname">Password:</label><br>
-			  <input type="text" id="lname" name="lname" value="admin"><br><br>
-        <input type="submit" value="Submit"/>
+    <div class="container">
+      <a href="${pageContext.request.contextPath}"><h1>&larr;</h1></a>
+      <h1 class="page-title">Register</h1>
+      <form action="register" method="post">
+        <h5 class="label">Account</h5>
+        <input type="text" name="username" placeholder="Username" >
+        <h5 class="label">Password</h5>
+        <input type="password" name="pwd" placeholder="Password" >
+			  <h5 class="label">First Name</h5>
+			  <input type="text" id="fname" name="fname" placeholder="first name" >
+			  <h5 class="label">Last Name</h5>
+			  <input type="text" id="lname" name="lname" placeholder="last name" >
+        <input type="submit" value="Register"/>
       </form>
+      <% 
+      String errorMsg = (String) request.getAttribute("errorMsg");
+      if(errorMsg.length() > 0) {
+        out.println(errorMsg);
+      }
+      %>
+    </div>
   </body>
 </html>
