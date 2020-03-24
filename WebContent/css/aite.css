@@ -5,7 +5,7 @@ a {
 body {
   margin: 0;
 }
-.container{
+.container {
   width:480px;
   margin: 0 auto;
   padding: 25px;
@@ -16,7 +16,7 @@ body {
 }
 input {
 }
-input[type=text], input[type=password]{
+input[type=text], input[type=password] {
   display: block;
   margin: 0;
   width: 100%;
@@ -30,7 +30,7 @@ input[type=text], input[type=password]{
   border: 0px;
   border-bottom: 1px solid #ced4da;
 }
-input[type=submit]{
+input[type=submit] {
   display: block;
   margin: 0;
   width: 100%;
@@ -52,18 +52,18 @@ input[type=submit]{
 input[type=text]:focus {
   border-bottom: 1px solid #333333;
 }
-.btn{
+.btn {
   height: calc(1.5em + .75rem + 12px);
   border: 1px solid #ced4da;
   background-color: #333;
   color: white;
   cursor: pointer;
 }
-.btn.full-width{
+.btn.full-width {
   width:100%;
   display:block;
 }
-.page-title{
+.page-title {
 
 }
 .label{
@@ -71,7 +71,7 @@ input[type=text]:focus {
   margin: 0;
   padding: 0.5rem 0 0.5rem 0;
 }
-.errorMsg{
+.errorMsg {
   color: red;
   padding: 15px 0 15px 0;
 }
@@ -83,15 +83,21 @@ input[type=text]:focus {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+  margin-top:-25px;
+  margin-left: -25px;
+  margin-right: -25px;
 }
 .nav-link {
-    display: block;
-    padding: .5rem 1rem;
+  display: block;
+  padding: .5rem 1rem;
 }
 .nav-fill .nav-item {
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   text-align: center;
+  padding-top:15px;
+  padding-bottom:15px;
+  border-bottom: 1px solid #EEEEEE;
 }
 .nav-item.active {
   border-bottom: 1px solid #333333;
@@ -108,39 +114,171 @@ textarea {
   flex-direction: row;;
   flex-wrap: nowrap;
 }
-.service{
+.service {
   padding: 10px 0 10px 0;
 }
-.serviceList{
-  padding: 25px 0 25px 0;
+.serviceList {
+  padding: 15px 0 15px 0;
 }
-.service .avatar{
+.service > .avatar {
   flex: 1;
 }
-.service .avatar img{
+.service > .avatar > img {
   width: 100px;
   height: 100px;
 }
-.service .info{
+.service > .info{
   max-width:365px;
   flex: 3;
 }
-.service .price, .ratings{
+.service .price, .ratings {
   flex: 1 1 0;
 
 }
-.service .info {
+.service > .info {
   padding-left: 15px;
   padding-top: 10px;
 }
-.service .info .title{
+.service > .info > .title {
   font-size: 24px;
   font-weight: bold;
   text-overflow: ellipsis;
   overflow:hidden;
 }
-.service .info .name{
+.service > .info > .name {
   padding-top: 10px;
   padding-bottom: 10px;
   color: #666;
+}
+
+.taskList {
+  padding: 15px 0 15px 0;
+}
+
+.task {
+  padding: 15px 0 15px 0;
+}
+.task > .title{
+  font-size: 24px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+
+.task > .name {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #666;
+}
+
+.task > .time {
+  font-size: 14px;
+}
+
+.task_detail {
+  padding-top: 15px;
+}
+.task_detail > .header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.task_detail > .header > .title {
+  margin: 0;
+}
+.task_detail > .header > .info > h6 {
+  margin: 0;
+}
+.task_detail > .header > .info > .posted {
+  font-size: 20px;
+  color: #444;
+  padding-bottom: 5px;
+}
+.task_detail > .header > .info > .time {
+  padding-top:3px;
+  font-size: 14px;
+}
+.task_detail > .header > .info > .location {
+  padding-top:3px;
+  font-size: 14px;
+}
+.task_detail > .description {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #EEEEEE;
+}
+.task_detail > .description > h3{
+  margin: 0;
+}
+.task_detail > .ratings {
+  align-items: baseline;
+  border-bottom: 1px solid #EEEEEE;
+}
+.task_detail > .ratings > .title {
+  flex: 1;
+}
+.task_detail > .ratings > .star {
+  color:  #ffa534;
+  padding-right: 5px;
+}
+.task_detail > .ratings > .score {
+
+}
+
+
+.worker_detail {
+  padding-top: 15px;
+}
+.worker_detail > .header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #EEEEEE;
+}
+.worker_detail > .header > .info {
+  padding-left:15px;
+}
+.worker_detail > .header > .info > .name {
+  font-size: 20px;
+}
+.worker_detail > .header > .info > .ratings {
+  padding-top:3px;
+  font-size: 14px;
+}
+.worker_detail > .header > .info > .time {
+  font-size: 14px;
+  padding-top:3px;
+  color: #666;
+}
+.worker_detail > .header > .info > .ratings > .star {
+  padding-right: 5px;
+  color:  #ffa534;
+}
+.worker_detail > .header > .avatar > img {
+  width: 60px;
+  height: 60px;
+}
+.worker_detail > .description {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #EEEEEE;
+}
+.worker_detail > .description > h3{
+  margin: 0;
+}
+.worker_detail > .ratings {
+  align-items: baseline;
+  border-bottom: 1px solid #EEEEEE;
+}
+.worker_detail > .ratings > .title {
+  flex: 1;
+}
+.worker_detail > .ratings > .star {
+  color:  #ffa534;
+  padding-right: 5px;
+}
+.worker_detail > .ratings > .score {
+
+}
+
+a h1 {
+  margin: 0;
 }

@@ -14,23 +14,29 @@
 			  <a class="nav-item nav-link" href="${pageContext.request.contextPath}/gigtasks">Tasks Hunting</a>
 			  <a class="nav-item nav-link active" href="javascript:void(0);">Settings</a>
 		  </nav>
-      <div>
-        <div>
+      <ul>
+        <li>
           <a href="${pageContext.request.contextPath}/user/chpwd">Change Password</a>
-        </div>
-        <div>
-          <a href="${pageContext.request.contextPath}/user/service">Edit Service</a>
-        </div>
-        <div>
-          <a href="${pageContext.request.contextPath}/history">History</a>
-        </div>
-        <div>
-          <a href="${pageContext.request.contextPath}/comments">My Comments</a>
-        </div>
-        <div>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/user/newTask">New Task</a>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/user/service">My Service</a>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/user/tasks">My Tasks</a>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/user/history">Order History</a>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/user/comments">My Comments</a>
+        </li>
+        <li>
           <a href="${pageContext.request.contextPath}/logout">Logout</a>
-        </div>
-      </div>
+        </li>
+      </ul>
 	  </div>
 	</body>
 </html>

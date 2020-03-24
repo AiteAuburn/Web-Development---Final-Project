@@ -4,13 +4,12 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Service</title>
+    <title>Page Not Found</title>
   </head>
   <body>
     <div class="container">
-      <a href="${pageContext.request.contextPath}/settings"><h1>&larr;</h1></a>
-      <h1 class="page-title">Service</h1>
-      <div>Success!</div>
+      <a href="javascript:history.back()"><h1>&larr;</h1></a>
+      <h1 class="page-title">Page Not Found</h1>
     </div>
   </body>
 </html>

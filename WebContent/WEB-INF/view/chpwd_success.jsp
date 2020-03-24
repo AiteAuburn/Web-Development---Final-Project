@@ -4,12 +4,12 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Service</title>
+    <title>Change Password</title>
   </head>
   <body>
     <div class="container">
       <a href="${pageContext.request.contextPath}/settings"><h1>&larr;</h1></a>
-      <h1 class="page-title">Service</h1>
+      <h1 class="page-title">Change Password</h1>
       <div>Success!</div>
     </div>
   </body>

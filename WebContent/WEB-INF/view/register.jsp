@@ -4,7 +4,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Register</title>
+    <title>Change Password</title>
   </head>
   <body>
     <div class="container">
@@ -16,9 +16,9 @@
         <h5 class="label">Password</h5>
         <input type="password" name="pwd" placeholder="Password" >
 			  <h5 class="label">First Name</h5>
-			  <input type="text" id="fname" name="fname" placeholder="first name" >
+			  <input type="text" name="fname" placeholder="first name" >
 			  <h5 class="label">Last Name</h5>
-			  <input type="text" id="lname" name="lname" placeholder="last name" >
+			  <input type="text" name="lname" placeholder="last name" >
         <input type="submit" value="Register"/>
       </form>
       <% 

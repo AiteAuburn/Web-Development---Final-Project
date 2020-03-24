@@ -26,7 +26,7 @@
 			    output += "<div class='service row'>";
 		      output += "<div class='avatar'><img src='" + request.getContextPath() + "/img/avatar.png' /></div>";
 	        output += "<div class='info'>";
-	        output += "<div class='title'>" + service.title + "</div>";
+	        output += "<div class='title'><a href='"+ request.getContextPath() +"/gigworkers?sid="+ service.sid +"'>" + service.title + "</a></div>";
 	        output += "<div class='name'>" + service.name + "</div>";
 	        output += "<div class='row'>";
 	        output += "<div class='price'> $" + service.price + "</div>";

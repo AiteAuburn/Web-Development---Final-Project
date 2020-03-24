@@ -1,5 +1,6 @@
 package aite.service;
 import aite.model.ServiceModel;
+import aite.model.TaskModel;
 import java.sql.Date;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -55,10 +56,85 @@ public class UserService {
     }
     return result;
   }
-  public ArrayList<ServiceModel> getTasks(int offset, int pageSize){
-    return null;
+  public ArrayList<TaskModel> getTaskList() {
+    ArrayList<TaskModel> result = new ArrayList<TaskModel>();
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      connect = DriverManager.getConnection(connectionStr);
+      statement = connect.createStatement();
+      preparedStatement = connect.prepareStatement("SELECT tid, t.uid, lname, fname, title, create_time from task t, user u WHERE t.uid = u.uid");
+      resultSet = preparedStatement.executeQuery();
+      while(resultSet.next()) {
+        TaskModel task = new TaskModel();
+        task.tid = resultSet.getInt("tid");
+        task.uid = resultSet.getInt("uid");
+        task.name = resultSet.getString("fname") + resultSet.getString("lname");
+        task.title = resultSet.getString("title");
+        task.createTime = resultSet.getString("create_time");
+        result.add(task);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    } finally {
+      close();
+    }
+    return result;
   }
-  public ServiceModel getService(String accessToken) {
+  public TaskModel getTask(int tid) {
+    TaskModel task = null;
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT tid, t.uid, fname, lname, title, location, description, create_time FROM task t, user u WHERE t.uid = u.uid AND tid = ?");
+        preparedStatement.setInt(1, tid);
+        resultSet = preparedStatement.executeQuery();
+        boolean result = resultSet.next();
+        if(result) {
+          task = new TaskModel();
+          task.tid = resultSet.getInt("tid");
+          task.uid = resultSet.getInt("uid");
+          task.name = resultSet.getString("fname") + resultSet.getString("lname");
+          task.title = resultSet.getString("title");
+          task.location = resultSet.getString("location");
+          task.description = resultSet.getString("description");
+          task.createTime = resultSet.getString("create_time");
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    return task;
+  }
+
+  public ServiceModel getService(int sid) {
+    ServiceModel service = null;
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      connect = DriverManager.getConnection(connectionStr);
+      statement = connect.createStatement();
+      preparedStatement = connect.prepareStatement("SELECT fname, lname, title, price, description, enabled from service s, user u WHERE sid = ? AND s.uid = u.uid LIMIT 1");
+      preparedStatement.setInt(1, sid);
+      resultSet = preparedStatement.executeQuery();
+      boolean result = resultSet.next();
+      if(result) {
+        service = new ServiceModel();
+        service.title = resultSet.getString("title");
+        service.name = resultSet.getString("fname") + resultSet.getString("lname");
+        service.price = resultSet.getFloat("price");
+        service.description = resultSet.getString("description");
+        service.enabled = resultSet.getBoolean("enabled");
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    } finally {
+      close();
+    }
+    return service;
+  }
+  public ServiceModel getMyService(String accessToken) {
+    ServiceModel service = null;
     int uid = getUIDbyToken(accessToken);
     if( uid > 0) {
       try {
@@ -69,38 +145,72 @@ public class UserService {
         preparedStatement.setInt(1, uid);
         resultSet = preparedStatement.executeQuery();
         boolean result = resultSet.next();
-        if(!result) {
-          return null;
-        } else {
-          ServiceModel service = new ServiceModel();
+        if(result) {
+          service = new ServiceModel();
           service.title = resultSet.getString("title");
           service.price = resultSet.getFloat("price");
           service.description = resultSet.getString("description");
           service.enabled = resultSet.getBoolean("enabled");
-          return service;
         }
       } catch (Exception e) {
         System.out.println(e);
-        return null;
       } finally {
         close();
       }
     }
-    return null;
+    return service;
   }
+
+  public int newTask(String accessToken, String title, String location, String description) {
+
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    if( title == null || title.length() == 0 )
+      return ERRORCODE.NEWTASK_TITLE_EMPTY;
+    else if( description == null || description.length() == 0)
+      return ERRORCODE.NEWTASK_DESCRIPTION_EMPTY;
+    else if(location == null || location.length() == 0) {
+      location = "Not Known";
+    }
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      connect = DriverManager.getConnection(connectionStr);
+      statement = connect.createStatement();
+      preparedStatement = connect.prepareStatement("INSERT INTO task (uid, title, location, description) VALUES (?, ?, ?, ?)");
+      preparedStatement.setInt(1, uid);
+      preparedStatement.setString(2, title);
+      preparedStatement.setString(3, location);
+      preparedStatement.setString(4, description);
+      int result = preparedStatement.executeUpdate();
+      if(result > 0) {
+        // Query Success
+      } else {
+        // Query failed
+        errorCode = ERRORCODE.NEWTASK_INSERT_ERROR;
+      }
+    } catch (Exception e) {
+      errorCode = ERRORCODE.NEWTASK_EXCEPTION;
+      System.out.println(e);
+    } finally {
+      close();
+    }
+    
+    return errorCode;
+  }
+  
   public int editService(String accessToken, String title, String price, String description, String enabled) {
 
     int errorCode = 0;
     float floatPrice = 0;
     Boolean booleanEnbaled = false;
     int uid = getUIDbyToken(accessToken);
-    if( title.length() == 0 )
+    if( title == null || title.length() == 0 )
       return ERRORCODE.SERVICE_TITLE_EMPTY;
-    else if( price.length() == 0)
+    else if( price == null || price.length() == 0)
       return ERRORCODE.SERVICE_PRICE_EMPTY;
-    else if( description.length() == 0)
+    else if( description == null || description.length() == 0)
       return ERRORCODE.SERVICE_DESCRIPTION_EMPTY;
-    else if( enabled.length() == 0)
+    else if( enabled == null|| enabled.length() == 0)
       return ERRORCODE.SERVICE_ENABLED_EMPTY;
     else if( !enabled.equalsIgnoreCase("true") & !enabled.equalsIgnoreCase("false"))
       return ERRORCODE.SERVICE_ENABLED_OUTRANGE;
@@ -162,7 +272,42 @@ public class UserService {
       close();
     }
     
-    return 0;
+    return errorCode;
+  }
+  public int changePassword(String accessToken, String oldpwd, String pwd, String confirmpwd) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    if( uid > 0) {
+      if(oldpwd.equals(pwd)){
+        return ERRORCODE.CHPWD_SAME_PASSWORD;
+      } else if(!pwd.equals(confirmpwd)) {
+        return ERRORCODE.CHPWD_CONFIRMPWD_ERROR;
+      }
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("UPDATE user SET pwd = ? WHERE uid = ? AND pwd = ?");
+        preparedStatement.setString(1, pwd);
+        preparedStatement.setInt(2, uid);
+        preparedStatement.setString(3, oldpwd);
+        int result = preparedStatement.executeUpdate();
+        if(result > 0) {
+          // Query Success
+        } else {
+          // Query failed
+          errorCode = ERRORCODE.CHPWD_PASSWORD_MISMATCH;
+        }
+      } catch (Exception e) {
+        errorCode = ERRORCODE.CHPWD_EXCEPTION;
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.CHPWD_UNANTHORIZED;
+    }
+    return errorCode;
   }
   public int login(String username, String pwd) {
     int errorCode = 0;

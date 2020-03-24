@@ -21,6 +21,15 @@ public class ERRORCODE {
   public final static int SERVICE_INSERT_ERROR = 306;
   public final static int SERVICE_EDIT_ERROR = 307;
   public final static int SERVICE_EXCEPTION = 308;
+  public final static int NEWTASK_TITLE_EMPTY = 401;
+  public final static int NEWTASK_DESCRIPTION_EMPTY = 402;
+  public final static int NEWTASK_INSERT_ERROR = 403;
+  public final static int NEWTASK_EXCEPTION = 404;
+  public final static int CHPWD_SAME_PASSWORD = 501;
+  public final static int CHPWD_CONFIRMPWD_ERROR = 502;
+  public final static int CHPWD_UNANTHORIZED = 503;
+  public final static int CHPWD_EXCEPTION = 504;
+  public final static int CHPWD_PASSWORD_MISMATCH = 505;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -39,7 +48,18 @@ public class ERRORCODE {
       put(SERVICE_DESCRIPTION_EMPTY, "Description cannot be empty!");
       put(SERVICE_ENABLED_EMPTY, "Enabled cannot be empty!");
       put(SERVICE_ENABLED_OUTRANGE, "Enabled Invalid!");
-
+      put(SERVICE_INSERT_ERROR, "Please try again later!");
+      put(SERVICE_EDIT_ERROR, "Please try again later!");
+      put(SERVICE_EXCEPTION, "Please try again later!");
+      put(NEWTASK_TITLE_EMPTY, "Title cannot be empty!");
+      put(NEWTASK_DESCRIPTION_EMPTY, "Description cannot be empty!");
+      put(NEWTASK_INSERT_ERROR, "Please try again later!");
+      put(NEWTASK_EXCEPTION, "Please try again later!");
+      put(CHPWD_SAME_PASSWORD, "Your new password is the same as old password.");
+      put(CHPWD_CONFIRMPWD_ERROR, "Confirm password does not match");
+      put(CHPWD_UNANTHORIZED, "Unanthorized Action!");
+      put(CHPWD_EXCEPTION, "Please try again later!");
+      put(CHPWD_PASSWORD_MISMATCH, "Old password does not match");
     }};
 
     //put(, "");

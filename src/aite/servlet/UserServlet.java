@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet({"/login", "/register", "/settings", "/user/service", "/logout"})
+@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/newTask", "/logout"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -37,6 +37,8 @@ public class UserServlet extends HttpServlet {
         getRegister(request, response);
       } else if (request.getRequestURI().endsWith("/settings") && uid > 0) {
         getSettings(request, response);
+      } else if (request.getRequestURI().endsWith("/user/newTask") && uid > 0) {
+        getNewTask(request, response);
       } else if (request.getRequestURI().endsWith("/user/service") && uid > 0) {
         getService(request, response);
       } else if (request.getRequestURI().endsWith("/user/chpwd") && uid > 0) {
@@ -63,9 +65,12 @@ public class UserServlet extends HttpServlet {
       request.getSession().invalidate();
       response.sendRedirect(request.getContextPath());
     }
+	protected void getNewTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      request.getRequestDispatcher("/WEB-INF/view/new_task.jsp").forward(request, response);
+    }
 	protected void getService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
-	  ServiceModel n = userService.getService(accessToken);
+	  ServiceModel n = userService.getMyService(accessToken);
       request.setAttribute("defaultTitle", n.title);
       request.setAttribute("defaultPrice", String.valueOf(n.price));
       request.setAttribute("defaultDescription", n.description);
@@ -82,10 +87,34 @@ public class UserServlet extends HttpServlet {
           doRegister(request, response);
         } else if (request.getRequestURI().endsWith("/user/service")) {
           editService(request, response);
+        } else if (request.getRequestURI().endsWith("/user/newTask")) {
+          newTask(request, response);
+        } else if (request.getRequestURI().endsWith("/user/chpwd")) {
+          changePwd(request, response);
 		} else {
-			response.sendRedirect(request.getContextPath());
+		  response.sendRedirect(request.getContextPath());
 		}
 	}
+	
+	private void newTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String title = request.getParameter("title");
+      String location = request.getParameter("location");
+      String description = request.getParameter("description");
+      int errorCode = userService.newTask(accessToken, title, location, description);
+      output = String.format("POST: /user/newTask [%d] | accessToken: %s", errorCode, accessToken);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        request.getRequestDispatcher("/WEB-INF/view/new_task_success.jsp").forward(request, response);
+      } else {
+        request.setAttribute("defaultTitle", title);
+        request.setAttribute("defaultLocation", location);
+        request.setAttribute("defaultDescription", description);
+        request.getRequestDispatcher("/WEB-INF/view/new_task.jsp").forward(request, response);
+      }
+    }
 	private void editService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
 	  String output;
@@ -122,6 +151,22 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
       }
 	}
+	private void changePwd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String oldpwd = request.getParameter("oldpwd");
+      String pwd = request.getParameter("pwd");
+      String confirmpwd = request.getParameter("confirmpwd");
+      int errorCode = userService.changePassword(accessToken, oldpwd, pwd, confirmpwd);
+      output = String.format("POST: /user/chpwd [%d]", errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        request.getRequestDispatcher("/WEB-INF/view/chpwd_success.jsp").forward(request, response);
+      } else {
+        request.getRequestDispatcher("/WEB-INF/view/chpwd.jsp").forward(request, response);
+      }
+    }
 	private void doRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String output;
       String username = request.getParameter("username");
