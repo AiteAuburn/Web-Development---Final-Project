@@ -1,5 +1,5 @@
 package aite.servlet;
-
+import java.util.ArrayList;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,12 +7,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import aite.model.ServiceModel;
+import aite.service.UserService;
+
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/gigworkers")
 public class GigWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    private UserService userService = new UserService();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,11 +34,15 @@ public class GigWorkersServlet extends HttpServlet {
       if(accessToken == null) {
         response.sendRedirect(request.getContextPath());
       } else {
-        request.getRequestDispatcher("WEB-INF/view/gigworkers.jsp").forward(request, response);
+        getServiceList(request, response);
       }
 		
 	}
-
+	protected void getServiceList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  ArrayList<ServiceModel> sList = userService.getServiceList();
+	  request.setAttribute("serviceList", sList);
+      request.getRequestDispatcher("WEB-INF/view/gigworkers.jsp").forward(request, response);
+    }
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

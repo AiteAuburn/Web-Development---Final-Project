@@ -17,7 +17,7 @@
         <input type="password" name="pwd" value="admin" placeholder="Password" >
 	      <% 
 	      String errorMsg = (String) request.getAttribute("errorMsg");
-	      if(errorMsg.length() > 0) {
+	      if(errorMsg != null && errorMsg.length() > 0) {
 	        out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
 	      }
 	      %>

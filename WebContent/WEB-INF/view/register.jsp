@@ -23,8 +23,8 @@
       </form>
       <% 
       String errorMsg = (String) request.getAttribute("errorMsg");
-      if(errorMsg.length() > 0) {
-        out.println(errorMsg);
+      if(errorMsg != null && errorMsg.length() > 0) {
+        out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
       }
       %>
     </div>

@@ -101,3 +101,46 @@ textarea {
   max-width: 100%;
   min-height: 150px;
 }
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-direction: row;;
+  flex-wrap: nowrap;
+}
+.service{
+  padding: 10px 0 10px 0;
+}
+.serviceList{
+  padding: 25px 0 25px 0;
+}
+.service .avatar{
+  flex: 1;
+}
+.service .avatar img{
+  width: 100px;
+  height: 100px;
+}
+.service .info{
+  max-width:365px;
+  flex: 3;
+}
+.service .price, .ratings{
+  flex: 1 1 0;
+
+}
+.service .info {
+  padding-left: 15px;
+  padding-top: 10px;
+}
+.service .info .title{
+  font-size: 24px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+.service .info .name{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #666;
+}

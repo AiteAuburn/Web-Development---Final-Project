@@ -1,5 +1,6 @@
 package aite.servlet;
 import aite.service.ERRORCODE;
+import aite.model.ServiceModel;
 import aite.service.UserService;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -29,26 +30,48 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
-      int uid = userService.checkToken(accessToken);
-	  request.setAttribute("errorMsg", "");
+      int uid = userService.getUIDbyToken(accessToken);
       if (request.getRequestURI().endsWith("/login")) {
-        request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+        getLogin(request, response);
       } else if (request.getRequestURI().endsWith("/register")) {
-        request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+        getRegister(request, response);
       } else if (request.getRequestURI().endsWith("/settings") && uid > 0) {
-        request.getRequestDispatcher("/WEB-INF/view/settings.jsp").forward(request, response);
+        getSettings(request, response);
       } else if (request.getRequestURI().endsWith("/user/service") && uid > 0) {
-        request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
+        getService(request, response);
       } else if (request.getRequestURI().endsWith("/user/chpwd") && uid > 0) {
-        request.getRequestDispatcher("/WEB-INF/view/chpwd.jsp").forward(request, response);
+        getChpwd(request, response);
       } else if (request.getRequestURI().endsWith("/logout")) {
-        request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath());
+        doLogout(request, response);
       } else {
         response.sendRedirect(request.getContextPath());
       }
 	}
-
+	protected void getLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+    }
+	protected void getRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+    }
+	protected void getSettings(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      request.getRequestDispatcher("/WEB-INF/view/settings.jsp").forward(request, response);
+    }
+	protected void getChpwd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      request.getRequestDispatcher("/WEB-INF/view/chpwd.jsp").forward(request, response);
+	}
+	protected void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      request.getSession().invalidate();
+      response.sendRedirect(request.getContextPath());
+    }
+	protected void getService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+	  ServiceModel n = userService.getService(accessToken);
+      request.setAttribute("defaultTitle", n.title);
+      request.setAttribute("defaultPrice", String.valueOf(n.price));
+      request.setAttribute("defaultDescription", n.description);
+      request.setAttribute("defaultEnabled", String.valueOf(n.enabled));
+      request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
+    }
 	/**
 	 * @see HttpServlet#doPost(HttpServlRequest request, HttpServletResponse response)
 	 */
@@ -67,17 +90,21 @@ public class UserServlet extends HttpServlet {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
 	  String output;
       String title = request.getParameter("title");
-      Integer price = Integer.parseInt(request.getParameter("price"));
+      String price = request.getParameter("price");
       String description = request.getParameter("description");
-      Boolean enabled = Boolean.parseBoolean(request.getParameter("enabled"));
+      String enabled = request.getParameter("enabled");
       int errorCode = userService.editService(accessToken, title, price, description, enabled);
       output = String.format("POST: /user/service [%d] | accessToken: %s", errorCode, accessToken);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
-        response.sendRedirect(request.getContextPath() + "/gigworkers");
+        request.getRequestDispatcher("/WEB-INF/view/service_success.jsp").forward(request, response);
       } else {
-        request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+        request.setAttribute("defaultTitle", title);
+        request.setAttribute("defaultPrice", price);
+        request.setAttribute("defaultDescription", description);
+        request.setAttribute("defaultEnabled", enabled);
+        request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
       }
     }
 	private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
