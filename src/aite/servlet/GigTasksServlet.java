@@ -19,7 +19,7 @@ import aite.service.ERRORCODE;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet({"/gigtasks", "/gigtasks/apply", "/gigtasks/apply_cancel", "/gigtasks/accept", "/gigtasks/cancel" })
+@WebServlet({"/gigtasks", "/gigtasks/apply", "/gigtasks/apply_cancel", "/gigtasks/accept", "/gigtasks/reject" })
 public class GigTasksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -43,12 +43,18 @@ public class GigTasksServlet extends HttpServlet {
 	  if(accessToken == null) {
 	    response.sendRedirect(request.getContextPath());
 	  } else {
-	    String tid = (String) request.getParameter("tid");
-	    if(tid == null || tid.length() == 0) {
-	      getTaskList(request, response);
-	    } else {
-	      getTask(tid, request, response);
-	    }
+	    if (request.getRequestURI().endsWith("/gigtasks/accept")) {
+          acceptReqeust(request, response);
+        } else if (request.getRequestURI().endsWith("/gigtasks/reject")) {
+          rejectReqeust(request, response);
+        } else {
+    	  String tid = (String) request.getParameter("tid");
+    	  if(tid == null || tid.length() == 0) {
+    	    getTaskList(request, response);
+    	  } else {
+    	    getTask(tid, request, response);
+    	  }
+        }
 	  }
 	}
 	protected void getTask(String taskId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -126,5 +132,35 @@ public class GigTasksServlet extends HttpServlet {
         getTask(tid, request, response);
       }
     }
-	
+    private void acceptReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String tid = request.getParameter("tid");
+      String aid = request.getParameter("aid");
+      int errorCode = taskService.acceptOffer(accessToken, aid);
+      output = String.format("GET: /gigtasks/accept?tid=%s&aid=%s [%d]", tid, aid, errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+      } else {
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+      }
+    }
+    
+    private void rejectReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String tid = request.getParameter("tid");
+      String aid = request.getParameter("aid");
+      int errorCode = taskService.rejectOffer(accessToken, aid);
+      output = String.format("GET: /gigtasks/accept?tid=%s&aid=%s [%d]", tid, aid, errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+      } else {
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+      }
+    }
 }

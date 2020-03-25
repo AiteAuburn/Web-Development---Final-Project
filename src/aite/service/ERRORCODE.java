@@ -85,6 +85,20 @@ public class ERRORCODE {
   public final static int REJECTREQUEST_REJECT_ERROR = 1102;
   public final static int REJECTREQUEST_EXCEPTION = 1103;
   public final static int REJECTREQUEST_UNAUTHORIED = 1104;
+  
+
+
+  public final static int ACCEPTOFFER_ID_INVALID = 1201;
+  public final static int ACCEPTOFFER_DELETE_ERROR = 1202;
+  public final static int ACCEPTOFFER_INSERT_ERROR = 1203;
+  public final static int ACCEPTOFFER_EXCEPTION = 1204;
+  public final static int ACCEPTOFFER_UNAUTHORIED = 1205;
+  
+
+  public final static int REJECTOFFER_ID_INVALID = 1301;
+  public final static int REJECTOFFER_REJECT_ERROR = 1302;
+  public final static int REJECTOFFER_EXCEPTION = 1303;
+  public final static int REJECTOFFER_UNAUTHORIED = 1304;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -170,6 +184,17 @@ public class ERRORCODE {
       put(REJECTREQUEST_REJECT_ERROR, "Please try again later!");
       put(REJECTREQUEST_EXCEPTION, "Please try again later!");
       put(REJECTREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
+      
+      put(ACCEPTOFFER_ID_INVALID, "Invalid ID!");
+      put(ACCEPTOFFER_DELETE_ERROR, "Please try again later!");
+      put(ACCEPTOFFER_INSERT_ERROR, "Please try again later!");
+      put(ACCEPTOFFER_EXCEPTION, "Please try again later!");
+      put(ACCEPTOFFER_UNAUTHORIED, "UNAUTHORIZED!");
+      
+      put(REJECTOFFER_ID_INVALID, "Invalid ID!");
+      put(REJECTOFFER_REJECT_ERROR, "Please try again later!");
+      put(REJECTOFFER_EXCEPTION, "Please try again later!");
+      put(REJECTOFFER_UNAUTHORIED, "UNAUTHORIZED!");
     }};
 
     //put(, "");

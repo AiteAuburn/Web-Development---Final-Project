@@ -80,6 +80,10 @@
 			          output += "<div class='time'>" + applyTime + "</div>";
 		            output += "<div class='quote'>$" + apply.quote + "</div>";
 			          output += "</div>";
+	              output += "<div class='decision row'>";
+	              output += "<button class=\"btn accept full-width\" onclick=\"window.location.href='" + request.getContextPath() +"/gigtasks/accept?tid=" + task.tid +"&aid=" + apply.aid + "'\">Accept</button>";
+	              output += "<button class=\"btn decline full-width\" onclick=\"window.location.href='" + request.getContextPath() +"/gigtasks/reject?tid=" + task.tid +"&aid=" + apply.aid + "'\">Cancel</button>";
+	              output += "</div>";
 			          output += "</div>";
 			          out.print(output);
 			        }

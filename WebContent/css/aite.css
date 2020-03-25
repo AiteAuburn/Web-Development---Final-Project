@@ -188,6 +188,18 @@ textarea {
   padding-bottom: 10px;
   color: #666;
 }
+.apply > .decision {
+  align-items: center;
+}
+.apply > .decision > button.accept{
+  background-color: #00A000;
+}
+.apply > .decision > button.decline{
+  background-color: #F30000;
+}
+
+
+
 
 
 .request {

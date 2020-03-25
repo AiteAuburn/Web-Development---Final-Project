@@ -2,9 +2,124 @@ package aite.service;
 import aite.model.ApplyModel;
 import aite.model.TaskModel;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 public class GigTaskService extends Service{
 
+  public int acceptOffer(String accessToken, String applyId) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int aid = 0;
+    if( uid > 0 ) {
+      try {
+        aid = Integer.parseInt(applyId);
+      } catch(Exception e) {
+        return ERRORCODE.ACCEPTOFFER_ID_INVALID;
+      }
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        connect.setAutoCommit(false);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT a.apply_uid, t.title, t.description, t.location, a.quote FROM apply a LEFT JOIN task t ON a.tid = t.tid WHERE t.uid = ? AND a.aid = ? AND a.status = 'o' AND t.status = 'o'");
+        preparedStatement.setInt(1, uid);
+        preparedStatement.setInt(2, aid);
+        resultSet = preparedStatement.executeQuery();
+        boolean requestExist = resultSet.next();
+        if(requestExist) {
+          String title = resultSet.getString("title");
+          String location = resultSet.getString("location");
+          String description = resultSet.getString("description");
+          int worker_uid = resultSet.getInt("apply_uid");
+          float price = resultSet.getFloat("quote");
+          preparedStatement = connect.prepareStatement("INSERT INTO orders(worker_uid, requester_uid, price, title, location, description) VALUES(?, ?, ?, ?, ?, ?)");
+          preparedStatement.setInt(1, worker_uid);
+          preparedStatement.setInt(2, uid);
+          preparedStatement.setFloat(3, price);
+          preparedStatement.setString(4, title);
+          preparedStatement.setString(5, location);
+          preparedStatement.setString(6, description);
+          int result = preparedStatement.executeUpdate();
+          if(result > 0) {
+            // Query Success
+            preparedStatement = connect.prepareStatement("DELETE FROM apply WHERE aid = ?");
+            preparedStatement.setInt(1, aid);
+            result = preparedStatement.executeUpdate();
+            if(result > 0) {
+              connect.commit();
+            } else {
+              errorCode = ERRORCODE.ACCEPTOFFER_DELETE_ERROR;
+            }
+          } else {
+            // Query failed
+            errorCode = ERRORCODE.ACCEPTOFFER_INSERT_ERROR;
+          }
+        }
+      } catch (SQLException e) {
+        System.out.println(e);
+        try {
+          connect.rollback();
+        } catch (SQLException e1) {
+          e1.printStackTrace();
+        }
+        errorCode = ERRORCODE.ACCEPTOFFER_EXCEPTION;
+      } catch (Exception e) {
+        System.out.println(e);
+        try {
+          connect.rollback();
+        } catch (SQLException e1) {
+          e1.printStackTrace();
+        }
+        errorCode = ERRORCODE.ACCEPTOFFER_EXCEPTION;
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.ACCEPTOFFER_UNAUTHORIED;
+    }
+    return errorCode;
+  }
+  
+  public int rejectOffer(String accessToken, String applyId) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int aid = 0;
+    if( uid > 0 ) {
+      try {
+        aid = Integer.parseInt(applyId);
+      } catch(Exception e) {
+        return ERRORCODE.REJECTOFFER_ID_INVALID;
+      }
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT aid FROM apply a LEFT JOIN task t ON a.tid = t.tid WHERE t.uid = ? AND aid = ?");
+        preparedStatement.setInt(1, uid);
+        preparedStatement.setInt(2, aid);
+        resultSet = preparedStatement.executeQuery();
+        boolean requestExist = resultSet.next();
+        if(requestExist) {
+          preparedStatement = connect.prepareStatement("UPDATE apply SET status = 'r' WHERE aid = ?");
+          preparedStatement.setInt(1, aid);
+          int result = preparedStatement.executeUpdate();
+          if(result > 0) {
+          } else {
+            errorCode = ERRORCODE.REJECTOFFER_REJECT_ERROR;
+          }
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+        errorCode = ERRORCODE.REJECTOFFER_EXCEPTION;
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.REJECTOFFER_UNAUTHORIED;
+    }
+    return errorCode;
+  }
+  
   public ArrayList<ApplyModel> getApplyList(String accessToken, int tid){
     ArrayList<ApplyModel> result = new ArrayList<ApplyModel>();
     int uid = getUIDbyToken(accessToken);
