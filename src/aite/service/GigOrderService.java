@@ -70,8 +70,9 @@ public class GigOrderService extends Service{
               preparedStatement.setString(5, comment);
               int result = preparedStatement.executeUpdate();
               if(result > 0) {
-                preparedStatement = connect.prepareStatement("UPDATE orders SET status = ?");
+                preparedStatement = connect.prepareStatement("UPDATE orders SET status = ? WHERE oid = ?");
                 preparedStatement.setString(1, nextStatus);
+                preparedStatement.setInt(2, oid);
                 result = preparedStatement.executeUpdate();
                 if(result > 0) {
                   connect.commit();
