@@ -14,7 +14,6 @@ import aite.service.GigTaskService;
 
 import aite.model.ApplyModel;
 import aite.model.TaskModel;
-import aite.service.ERRORCODE;
 
 /**
  * Servlet implementation class LoginServlet
@@ -111,11 +110,10 @@ public class GigTasksServlet extends HttpServlet {
       int errorCode = taskService.applyTask(accessToken, tid, price);
       output = String.format("POST: /gigtasks/apply [%d]", errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
       } else {
-        getTask(tid, request, response);
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s&errorCode=%d", request.getContextPath(), tid, errorCode));
       }
     }
 	private void doCancel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -125,11 +123,10 @@ public class GigTasksServlet extends HttpServlet {
       int errorCode = taskService.cancelOffer(accessToken,tid);
       output = String.format("POST: /gigtasks/apply_cancel [%d]", errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
       } else {
-        getTask(tid, request, response);
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s&errorCode=%d", request.getContextPath(), tid, errorCode));
       }
     }
     private void acceptReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -140,11 +137,10 @@ public class GigTasksServlet extends HttpServlet {
       int errorCode = taskService.acceptOffer(accessToken, aid);
       output = String.format("GET: /gigtasks/accept?tid=%s&aid=%s [%d]", tid, aid, errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
       } else {
-        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s&errorCode=%d", request.getContextPath(), tid, errorCode));
       }
     }
     
@@ -156,11 +152,10 @@ public class GigTasksServlet extends HttpServlet {
       int errorCode = taskService.rejectOffer(accessToken, aid);
       output = String.format("GET: /gigtasks/accept?tid=%s&aid=%s [%d]", tid, aid, errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
       } else {
-        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s&errorCode=%d", request.getContextPath(), tid, errorCode));
       }
     }
 }

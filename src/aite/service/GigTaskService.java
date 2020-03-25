@@ -55,23 +55,17 @@ public class GigTaskService extends Service{
             errorCode = ERRORCODE.ACCEPTOFFER_INSERT_ERROR;
           }
         }
-      } catch (SQLException e) {
-        System.out.println(e);
-        try {
-          connect.rollback();
-        } catch (SQLException e1) {
-          e1.printStackTrace();
-        }
-        errorCode = ERRORCODE.ACCEPTOFFER_EXCEPTION;
       } catch (Exception e) {
         System.out.println(e);
-        try {
-          connect.rollback();
-        } catch (SQLException e1) {
-          e1.printStackTrace();
-        }
         errorCode = ERRORCODE.ACCEPTOFFER_EXCEPTION;
       } finally {
+        if( errorCode != 0) {
+          try {
+            connect.rollback();
+          } catch (SQLException e1) {
+            System.out.println(e1);
+          }
+        }
         close();
       }
     } else {

@@ -1,13 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    import="java.util.ArrayList, java.util.Date, java.text.DateFormat, java.text.SimpleDateFormat,aite.model.WorkerModel,aite.model.RequestModel" 
+    import="java.util.ArrayList, java.util.Date, java.text.DateFormat, java.text.SimpleDateFormat,aite.model.WorkerModel,aite.model.RequestModel, aite.service.ERRORCODE" 
     
 %>
 <%
   int uid = (int) request.getAttribute("uid");
   WorkerModel service = (WorkerModel) request.getAttribute("service");
   DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-  String errorMsg = (String) request.getAttribute("errorMsg");
+  String erCode = request.getParameter("errorCode");
+  int errorCode = 0;
+  if(erCode != null){
+    errorCode = Integer.parseInt(erCode);
+  }
+  String errorMsg = ERRORCODE.getMsg(errorCode);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

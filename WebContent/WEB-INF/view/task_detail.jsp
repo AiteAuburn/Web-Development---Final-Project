@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    import="java.util.ArrayList, java.util.Date, java.text.DateFormat, java.text.SimpleDateFormat, aite.model.TaskModel, aite.model.ApplyModel" 
+    import="java.util.ArrayList, java.util.Date, java.text.DateFormat, java.text.SimpleDateFormat, aite.model.TaskModel, aite.model.ApplyModel, aite.service.ERRORCODE" 
     
 %>
 <%
@@ -9,7 +9,12 @@
 	DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
 	Date date = formatter.parse(task.createTime);
 	String time = new SimpleDateFormat("MMM dd, yyyy").format(date);
-	String errorMsg = (String) request.getAttribute("errorMsg");
+	String erCode = request.getParameter("errorCode");
+	int errorCode = 0;
+	if(erCode != null){
+	  errorCode = Integer.parseInt(erCode);
+	}
+	String errorMsg = ERRORCODE.getMsg(errorCode);
 	String action = request.getContextPath() + "/gigtasks/apply";
 	System.out.println("taskStatus: " + task.applyStatus);
 	if( task.applyStatus != null && task.applyStatus.equalsIgnoreCase("o")){

@@ -1,15 +1,111 @@
 package aite.service;
 import aite.model.OrderModel;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 public class GigOrderService extends Service{
-  public int submitReview(String accessToken, String oid, String ratings, String comment) {
+  public int submitReview(String accessToken, String orderId, String rt, String comment) {
     int errorCode = 0;
     int uid = getUIDbyToken(accessToken);
+    int oid = 0;
+    int ratings = 0;
     if( uid > 0 ) {
-    
+      try {
+        oid = Integer.parseInt(orderId);
+      } catch(Exception e) {
+        return ERRORCODE.SUBMITREVIEW_ORDERID_INVALID;
+      }
+      try {
+        ratings = Integer.parseInt(rt);
+        if(ratings < 0 || ratings > 5 ) {
+          return ERRORCODE.SUBMITREVIEW_RATINGS_INVALID;
+        }
+      } catch(Exception e) {
+        return ERRORCODE.SUBMITREVIEW_RATINGS_INVALID;
+      }
+      
+      if(comment == null) {
+        comment = "";
+      }
+
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        connect.setAutoCommit(false);
+        preparedStatement = connect.prepareStatement("SELECT o.oid, o.worker_uid,  o.requester_uid, o.status FROM orders o WHERE o.oid = ? AND (o.worker_uid = ? OR o.requester_uid = ?)");
+        preparedStatement.setInt(1, oid);
+        preparedStatement.setInt(2, uid);
+        preparedStatement.setInt(3, uid);
+        resultSet = preparedStatement.executeQuery();
+        boolean orderExist = resultSet.next();
+        if(orderExist) {
+          int requesterID =  resultSet.getInt("requester_uid");
+          int workerUID =  resultSet.getInt("worker_uid");
+          int senderID = uid;
+          int receiverID = 0;
+          receiverID = (senderID == requesterID )? workerUID:requesterID;
+          String status = resultSet.getString("status");
+          if(!status.equalsIgnoreCase("e") ) {
+            boolean canReview = false;
+            String nextStatus = "";
+            if( status.equalsIgnoreCase("o")) {
+              canReview = true;
+              if(senderID == workerUID) {
+                nextStatus = "wr";
+              } else {
+                nextStatus = "ww";
+              }
+            } else {
+              canReview = ( status.equalsIgnoreCase("ww") && senderID == workerUID) ||
+              ( status.equalsIgnoreCase("wr") && senderID == requesterID);
+              nextStatus = "e";
+            }
+            if(canReview) {
+              preparedStatement = connect.prepareStatement("INSERT INTO comment(oid, from_uid, to_uid, ratings, comment) VALUES(?, ?, ?, ?, ?)");
+              preparedStatement.setInt(1, oid);
+              preparedStatement.setInt(2, senderID);
+              preparedStatement.setInt(3, receiverID);
+              preparedStatement.setInt(4, ratings);
+              preparedStatement.setString(5, comment);
+              int result = preparedStatement.executeUpdate();
+              if(result > 0) {
+                preparedStatement = connect.prepareStatement("UPDATE orders SET status = ?");
+                preparedStatement.setString(1, nextStatus);
+                result = preparedStatement.executeUpdate();
+                if(result > 0) {
+                  connect.commit();
+                  //Success
+                } else {
+                  errorCode = ERRORCODE.SUBMITREVIEW_SUBMIT_ERROR;
+                }
+              } else {
+                errorCode = ERRORCODE.SUBMITREVIEW_SUBMIT_ERROR;
+              }
+            } else {
+              errorCode = ERRORCODE.SUBMITREVIEW_ALREADY_REVIEW;
+            }
+          } else {
+            errorCode = ERRORCODE.SUBMITREVIEW_ORDER_CLOSED;
+          }
+        } else {
+          errorCode = ERRORCODE.SUBMITREVIEW_ORDER_NOT_EXIST;
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+        errorCode = ERRORCODE.SUBMITREVIEW_EXCEPTION;
+      } finally {
+        if( errorCode != 0) {
+          try {
+            connect.rollback();
+          } catch (SQLException e1) {
+            System.out.println(e1);
+          }
+        }
+        close();
+      }
     } else {
-      errorCode = 1;
+      errorCode = ERRORCODE.SUBMITREVIEW_UNAUTHORIZED;
     }
     return errorCode;
   }

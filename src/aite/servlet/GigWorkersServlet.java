@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import aite.model.RequestModel;
 import aite.model.WorkerModel;
-import aite.service.ERRORCODE;
 import aite.service.GigWorkerService;
 import aite.service.UserService;
 /**
@@ -111,11 +110,10 @@ public class GigWorkersServlet extends HttpServlet {
       int errorCode = workerService.requestWorker(accessToken, sid, location, description);
       output = String.format("POST: /gigworkers/request [%d]", errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
       } else {
-        getService(sid, request, response);
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s&errorCode=%d", request.getContextPath(), sid, errorCode));
       }
     }
     private void doCancel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -125,11 +123,10 @@ public class GigWorkersServlet extends HttpServlet {
       int errorCode = workerService.cancelRequest(accessToken, sid);
       output = String.format("POST: /gigworkers/request_cancel [%d]", errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
       } else {
-        getService(sid, request, response);
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s&errorCode=%d", request.getContextPath(), sid, errorCode));
       }
     }
     private void acceptReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -140,11 +137,10 @@ public class GigWorkersServlet extends HttpServlet {
       int errorCode = workerService.acceptRequest(accessToken, rid);
       output = String.format("GET: /gigworkers/accept?sid=%s&rid=%s [%d]", sid, rid, errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
       } else {
-        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s&errorCode=%d", request.getContextPath(), sid, errorCode));
       }
     }
     
@@ -156,11 +152,10 @@ public class GigWorkersServlet extends HttpServlet {
       int errorCode = workerService.rejectRequest(accessToken, rid);
       output = String.format("GET: /gigworkers/reject?sid=%s&rid=%s [%d]", sid, rid, errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
         response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
       } else {
-        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s&errorCode=%d", request.getContextPath(), sid, errorCode));
       }
     }
 }

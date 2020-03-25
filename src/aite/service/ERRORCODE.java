@@ -99,6 +99,15 @@ public class ERRORCODE {
   public final static int REJECTOFFER_REJECT_ERROR = 1302;
   public final static int REJECTOFFER_EXCEPTION = 1303;
   public final static int REJECTOFFER_UNAUTHORIED = 1304;
+  
+  public final static int SUBMITREVIEW_ORDERID_INVALID = 1401;
+  public final static int SUBMITREVIEW_RATINGS_INVALID = 1402;
+  public final static int SUBMITREVIEW_ORDER_NOT_EXIST = 1403;
+  public final static int SUBMITREVIEW_ORDER_CLOSED = 1404;
+  public final static int SUBMITREVIEW_ALREADY_REVIEW = 1405;
+  public final static int SUBMITREVIEW_SUBMIT_ERROR = 1406;
+  public final static int SUBMITREVIEW_EXCEPTION = 1407;
+  public final static int SUBMITREVIEW_UNAUTHORIZED = 1408;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -195,6 +204,16 @@ public class ERRORCODE {
       put(REJECTOFFER_REJECT_ERROR, "Please try again later!");
       put(REJECTOFFER_EXCEPTION, "Please try again later!");
       put(REJECTOFFER_UNAUTHORIED, "UNAUTHORIZED!");
+      
+
+      put(SUBMITREVIEW_ORDERID_INVALID, "Invalid order id!");
+      put(SUBMITREVIEW_RATINGS_INVALID, "Invalid ratings, only allowed (0-5)!");
+      put(SUBMITREVIEW_ORDER_NOT_EXIST, "Order does not exist!");
+      put(SUBMITREVIEW_ORDER_CLOSED, "Order is closed!");
+      put(SUBMITREVIEW_ALREADY_REVIEW, "You already left a review!");
+      put(SUBMITREVIEW_SUBMIT_ERROR, "Please try again later!");
+      put(SUBMITREVIEW_EXCEPTION, "Please try again later!");
+      put(SUBMITREVIEW_UNAUTHORIZED, "UNAUTHORIZED!");
     }};
 
     //put(, "");

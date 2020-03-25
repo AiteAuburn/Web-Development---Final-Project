@@ -244,11 +244,10 @@ public class UserServlet extends HttpServlet {
       int errorCode = orderService.submitReview(accessToken, oid, ratings, comment);
       output = String.format("POST: /user/orders/review [%d]", errorCode);
       System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
-        response.sendRedirect(request.getContextPath() + "/user/orders?oid=" + oid);
+        response.sendRedirect(String.format("%s/user/orders?oid=%s", request.getContextPath(), oid));
       } else {
-        request.getRequestDispatcher("/WEB-INF/view/order_detail.jsp").forward(request, response);
+        response.sendRedirect(String.format("%s/user/orders?oid=%s&errorCode=%d", request.getContextPath(), oid, errorCode));
       }
     }
 	

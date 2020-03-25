@@ -361,6 +361,8 @@ textarea {
 .worker_detail > .ratings {
   align-items: baseline;
   border-bottom: 1px solid #EEEEEE;
+  padding-top:15px;
+  padding-bottom:15px;
 }
 .worker_detail > .ratings > .title {
   flex: 1;
