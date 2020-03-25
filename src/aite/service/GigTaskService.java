@@ -1,4 +1,6 @@
 package aite.service;
+import aite.model.ServiceModel;
+import aite.model.ApplyModel;
 import aite.model.TaskModel;
 import java.sql.DriverManager;
 import java.util.ArrayList;
@@ -53,6 +55,36 @@ public class GigTaskService extends Service{
     return errorCode;
   }
   
+
+  public ArrayList<ApplyModel> getApplyList(String accessToken, int tid){
+    ArrayList<ApplyModel> result = new ArrayList<ApplyModel>();
+    int uid = getUIDbyToken(accessToken);
+    if( uid > 0 ) {
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT aid, fname, lname, quote, a.create_time FROM task t LEFT JOIN apply a ON t.tid = a.tid LEFT JOIN user u ON a.apply_uid = u.uid WHERE t.tid = ? AND t.uid = ? AND a.status ='o'");
+        preparedStatement.setInt(1, tid);
+        preparedStatement.setInt(2, uid);
+        resultSet = preparedStatement.executeQuery();
+        while(resultSet.next()) {
+          ApplyModel apply = new ApplyModel();
+          apply.aid = resultSet.getInt("aid");
+          apply.name = resultSet.getString("fname") + resultSet.getString("lname");
+          apply.quote = resultSet.getFloat("quote");
+          apply.createTime = resultSet.getString("create_time"); 
+          result.add(apply);
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    }
+    return result;
+  }
+
   
   public int applyTask(String accessToken, String tid, String price) {
     int errorCode = 0;
@@ -201,9 +233,10 @@ public class GigTaskService extends Service{
             "LEFT JOIN user u " + 
             "ON t.uid = u.uid " + 
             "LEFT JOIN apply a " + 
-            "ON a.tid = t.tid AND a.apply_uid = t.uid " + 
+            "ON a.tid = t.tid AND a.apply_uid = ? " + 
             "WHERE t.tid = ? AND t.status = 'o'");
-        preparedStatement.setInt(1, tid);
+        preparedStatement.setInt(1, uid);
+        preparedStatement.setInt(2, tid);
         resultSet = preparedStatement.executeQuery();
         boolean result = resultSet.next();
         if(result) {

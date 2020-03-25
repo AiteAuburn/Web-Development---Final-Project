@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import aite.service.UserService;
 import aite.service.GigTaskService;
 
+import aite.model.ApplyModel;
 import aite.model.TaskModel;
 import aite.service.ERRORCODE;
 
@@ -36,8 +37,9 @@ public class GigTasksServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+	  int uid = userService.getUIDbyToken(accessToken);
+	  request.setAttribute("uid", uid);
 	  if(accessToken == null) {
 	    response.sendRedirect(request.getContextPath());
 	  } else {
@@ -64,6 +66,11 @@ public class GigTasksServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/page404.jsp").forward(request, response);
       } else {
         request.setAttribute("task", task);
+        int uid = (int) request.getAttribute("uid");
+        if( uid == task.uid) {
+          ArrayList<ApplyModel> aList = taskService.getApplyList(accessToken, tid);
+          request.setAttribute("applyList", aList);
+        }
         request.getRequestDispatcher("/WEB-INF/view/task_detail.jsp").forward(request, response);
       }
     }
@@ -76,6 +83,9 @@ public class GigTasksServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      int uid = userService.getUIDbyToken(accessToken);
+      request.setAttribute("uid", uid);
 	  if (request.getRequestURI().endsWith("/apply")) {
         doApply(request, response);
       } else if (request.getRequestURI().endsWith("/apply_cancel")) {

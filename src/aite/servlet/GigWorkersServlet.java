@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import aite.model.ServiceModel;
 import aite.service.GigWorkerService;
+import aite.service.UserService;
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet({"/gigworkers", "/gigworkers/apply"})
 public class GigWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+    private UserService userService = new UserService();
     private GigWorkerService workerService = new GigWorkerService();
        
     /**
@@ -30,6 +32,8 @@ public class GigWorkersServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      int uid = userService.getUIDbyToken(accessToken);
+      request.setAttribute("uid", uid);
       if(accessToken == null) {
         response.sendRedirect(request.getContextPath());
       } else {
