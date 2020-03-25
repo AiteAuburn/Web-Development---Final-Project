@@ -15,7 +15,7 @@ import aite.service.UserService;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet({"/gigworkers", "/gigworkers/request", "/gigworkers/request_cancel", "/gigworkers/accept"})
+@WebServlet({"/gigworkers", "/gigworkers/request", "/gigworkers/request_cancel", "/gigworkers/accept", "/gigworkers/reject"})
 public class GigWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -41,6 +41,8 @@ public class GigWorkersServlet extends HttpServlet {
       } else {
         if (request.getRequestURI().endsWith("/gigworkers/accept")) {
           acceptReqeust(request, response);
+        } else if (request.getRequestURI().endsWith("/gigworkers/reject")) {
+          rejectReqeust(request, response);
         } else {
           String sid = (String) request.getParameter("sid");
           if(sid == null || sid.length() == 0) {
@@ -137,6 +139,22 @@ public class GigWorkersServlet extends HttpServlet {
       String rid = request.getParameter("rid");
       int errorCode = workerService.acceptRequest(accessToken, rid);
       output = String.format("GET: /gigworkers/accept?sid=%s&rid=%s [%d]", sid, rid, errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+      } else {
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+      }
+    }
+    
+    private void rejectReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String sid = request.getParameter("sid");
+      String rid = request.getParameter("rid");
+      int errorCode = workerService.rejectRequest(accessToken, rid);
+      output = String.format("GET: /gigworkers/reject?sid=%s&rid=%s [%d]", sid, rid, errorCode);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {

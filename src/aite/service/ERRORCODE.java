@@ -80,7 +80,11 @@ public class ERRORCODE {
   public final static int ACCEPTREQUEST_EXCEPTION = 1004;
   public final static int ACCEPTREQUEST_UNAUTHORIED = 1005;
   
-  
+
+  public final static int REJECTREQUEST_ID_INVALID = 1101;
+  public final static int REJECTREQUEST_REJECT_ERROR = 1102;
+  public final static int REJECTREQUEST_EXCEPTION = 1103;
+  public final static int REJECTREQUEST_UNAUTHORIED = 1104;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -161,6 +165,11 @@ public class ERRORCODE {
       put(ACCEPTREQUEST_INSERT_ERROR, "Please try again later!");
       put(ACCEPTREQUEST_EXCEPTION, "Please try again later!");
       put(ACCEPTREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
+      
+      put(REJECTREQUEST_ID_INVALID, "Invalid ID!");
+      put(REJECTREQUEST_REJECT_ERROR, "Please try again later!");
+      put(REJECTREQUEST_EXCEPTION, "Please try again later!");
+      put(REJECTREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
     }};
 
     //put(, "");

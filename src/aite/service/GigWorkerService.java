@@ -80,6 +80,49 @@ public class GigWorkerService extends Service{
     }
     return errorCode;
   }
+  
+  public int rejectRequest(String accessToken, String requestId) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int rid = 0;
+    if( uid > 0 ) {
+      try {
+        rid = Integer.parseInt(requestId);
+      } catch(Exception e) {
+        return ERRORCODE.REJECTREQUEST_ID_INVALID;
+      }
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT rid FROM request r LEFT JOIN service s ON r.sid = s.sid WHERE s.uid = ? AND rid = ?");
+        preparedStatement.setInt(1, uid);
+        preparedStatement.setInt(2, rid);
+        resultSet = preparedStatement.executeQuery();
+        boolean requestExist = resultSet.next();
+        if(requestExist) {
+          preparedStatement = connect.prepareStatement("UPDATE request SET status = 'r' WHERE rid = ?");
+          preparedStatement.setInt(1, rid);
+          int result = preparedStatement.executeUpdate();
+          if(result > 0) {
+            
+          } else {
+            errorCode = ERRORCODE.REJECTREQUEST_REJECT_ERROR;
+          }
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+        errorCode = ERRORCODE.REJECTREQUEST_EXCEPTION;
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.REJECTREQUEST_UNAUTHORIED;
+    }
+    return errorCode;
+  }
+  
+  
   public ArrayList<RequestModel> getRequestList(String accessToken, int tid){
     ArrayList<RequestModel> result = new ArrayList<RequestModel>();
     int uid = getUIDbyToken(accessToken);

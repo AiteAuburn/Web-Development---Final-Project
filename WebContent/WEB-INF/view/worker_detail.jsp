@@ -84,7 +84,7 @@
 	                output += "</div>";
 	                output += "<div class='decision row'>";
 	                output += "<button class=\"btn accept full-width\" onclick=\"window.location.href='" + request.getContextPath() +"/gigworkers/accept?sid=" + service.sid +"&rid=" + rqst.rid + "'\">Accept</button>";
-	                output += "<button class=\"btn decline full-width\" onclick=\"window.location.href='" + request.getContextPath() +"/gigworkers/cancel?sid=" + service.sid +"&rid=" + rqst.rid + "'\">Cancel</button>";
+	                output += "<button class=\"btn decline full-width\" onclick=\"window.location.href='" + request.getContextPath() +"/gigworkers/reject?sid=" + service.sid +"&rid=" + rqst.rid + "'\">Cancel</button>";
 	                output += "</div>";
 	                output += "</div>";
 	                out.print(output);
