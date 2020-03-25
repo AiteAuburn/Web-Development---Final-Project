@@ -16,6 +16,7 @@ import aite.service.GigOrderService;
 import aite.model.WorkerModel;
 import aite.model.TaskModel;
 import aite.model.OrderModel;
+import aite.model.CommentModel;
 
 import aite.service.ERRORCODE;
 /**
@@ -129,7 +130,19 @@ public class UserServlet extends HttpServlet {
       
     }
     protected void getComments(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      System.out.println("GET: /user/comments");
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      int uid = userService.getUIDbyToken(accessToken);
+      String uidString = request.getParameter("uid");
+      try {
+        uid = Integer.parseInt(uidString);
+      }
+      catch (Exception e)
+      {
+      }
+      System.out.println("GET: /user/comments?uid=" + uid);
+
+      ArrayList<CommentModel> cList = userService.getComments(uid);
+      request.setAttribute("commentList", cList);
       request.getRequestDispatcher("/WEB-INF/view/comments.jsp").forward(request, response);
     }
     

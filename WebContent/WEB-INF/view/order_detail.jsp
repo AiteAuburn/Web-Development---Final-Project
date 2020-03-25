@@ -15,7 +15,8 @@
     errorCode = Integer.parseInt(erCode);
   }
   String errorMsg = ERRORCODE.getMsg(errorCode);
-  boolean showReviewSection = order.status.equals("o") || ( order.status.equals("ww") && uid == order.workerUID) || ( order.status.equals("wr") && uid == order.requesterID); 
+  boolean showReviewSection = order.status.equals("o") || ( order.status.equals("ww") && uid == order.workerUID) || ( order.status.equals("wr") && uid == order.requesterID);
+  
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -54,7 +55,52 @@
           %>
         <input type="submit" value="Submit Review (Order Completed)" />
       </form>
-      <% } %>
+      <% } else { %>
+	      <% if(order.status.equals("e")){%>
+	       <hr />
+	        <div class="text-center">
+	          <h2>Order Completed!</h2>
+	        </div>
+	       <hr />
+	      <% } else {%>
+         <hr />
+          <div class="text-center">
+            <h2> Waiting for his/her review</h2>
+          </div>
+         <hr />
+	      
+	      <% } %>
+          <% if(order.workerReviewRatings != -1) {
+          Date date = formatter.parse(order.requesterReviewTime);
+          String time = new SimpleDateFormat("HH:mm MMM dd, yyyy").format(date);%>
+	          <div class="review">
+	            <div class="header row">
+		            <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
+		            <div class="info">
+			            <div class="name"><%= order.workerName %></div>
+                  <div class="ratings"><span class="star">&#x2605</span> <%= order.workerReviewRatings %></div>
+                  <div class="time"><%= time %></div>
+		            </div>
+		          </div>
+              <div class="comment"><%= order.workerReview %></div>
+	          </div>
+          <% }%>
+          <% if(order.requesterReviewRatings != -1) {
+          Date date = formatter.parse(order.requesterReviewTime);
+          String time = new SimpleDateFormat("HH:mm MMM dd, yyyy").format(date);%>
+            <div class="review">
+              <div class="header row">
+                <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
+                <div class="info">
+                  <div class="name"><%= order.requesterName %></div>
+                  <div class="ratings"><span class="star">&#x2605</span> <%= order.requesterReviewRatings %></div>
+                  <div class="time"><%= time %></div>
+                </div>
+              </div>
+              <div class="comment"><%= order.requesterReview %></div>
+            </div>
+          <% }%>
+        <% }%>
     </div>
   </body>
 </html>

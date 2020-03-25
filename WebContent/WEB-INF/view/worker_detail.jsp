@@ -32,7 +32,7 @@
           </div>
           <div class="info">
             <div class="name"><%= service.name %></div>
-            <div class="ratings"><span class="star">&#x2605</span>4.0</div>
+            <div class="ratings"><span class="star">&#x2605</span><%= service.ratings %></div>
           </div>
         </div>
         <div class="description">
@@ -42,7 +42,7 @@
         <div class="ratings row">
           <h3 class="title">Ratings</h3>
           <h3 class="star">&#x2605</h3>
-          <h3 class="score">4.9 &rarr;</h3>
+          <h3 class="score"><a href="${pageContext.request.contextPath}/user/comments?uid=<%=service.uid%>"><%= service.ratings %> &rarr;</a></h3>
         </div>
           <% 
           if(errorMsg != null && errorMsg.length() > 0) {

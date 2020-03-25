@@ -1,10 +1,38 @@
 package aite.service;
 import aite.model.WorkerModel;
+import aite.model.OrderModel;
 import aite.model.TaskModel;
+import aite.model.CommentModel;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import aite.service.ERRORCODE;
 public class UserService extends Service{
+  public ArrayList<CommentModel> getComments(int uid) {
+    ArrayList<CommentModel> comments = new ArrayList<CommentModel>();
+    try {
+      Class.forName("com.mysql.jdbc.Driver");
+      connect = DriverManager.getConnection(connectionStr);
+      statement = connect.createStatement();
+
+      preparedStatement = connect.prepareStatement("SELECT cid, ratings, comment, create_time, CONCAT(u.fname, u.lname) as reviewer FROM comment c LEFT JOIN user u ON c.from_uid = u.uid WHERE to_uid = ? ORDER BY create_time DESC");
+      preparedStatement.setInt(1, uid);
+      resultSet = preparedStatement.executeQuery();
+      while(resultSet.next()) {
+        CommentModel comment = new CommentModel();
+        comment.cid = resultSet.getInt("cid");
+        comment.reviewer = resultSet.getString("reviewer");
+        comment.ratings = resultSet.getInt("ratings");
+        comment.comment = resultSet.getString("comment");
+        comment.createTime = resultSet.getString("create_time");
+        comments.add(comment);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+    } finally {
+      close();
+    }
+    return comments;
+  }
   public ArrayList<TaskModel> getMyTaskList(String accessToken) {
     ArrayList<TaskModel> result = new ArrayList<TaskModel>();
     int uid = getUIDbyToken(accessToken);

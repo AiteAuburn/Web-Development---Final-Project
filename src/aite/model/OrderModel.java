@@ -12,4 +12,10 @@ public class OrderModel {
   public String description;
   public String status;
   public String createTime;
+  public int workerReviewRatings = -1;
+  public String workerReview = "";
+  public String workerReviewTime;
+  public int requesterReviewRatings = -1;
+  public String requesterReview = "";
+  public String requesterReviewTime;
 }

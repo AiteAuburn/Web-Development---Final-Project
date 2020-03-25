@@ -31,7 +31,7 @@
           <a href="${pageContext.request.contextPath}/user/orders">Order History</a>
         </li>
         <li>
-          <a href="${pageContext.request.contextPath}/user/comments">My Comments</a>
+          <a href="${pageContext.request.contextPath}/user/comments">Received Reviews</a>
         </li>
         <li>
           <a href="${pageContext.request.contextPath}/logout">Logout</a>

@@ -146,6 +146,26 @@ public class GigOrderService extends Service{
           order.description = resultSet.getString("description");
           order.createTime = resultSet.getString("create_time");
           order.status = resultSet.getString("status");
+          preparedStatement = connect.prepareStatement("SELECT ratings, comment, create_time FROM comment WHERE oid = ? AND from_uid = ? LIMIT 1");
+          preparedStatement.setInt(1, oid);
+          preparedStatement.setInt(2, order.requesterID);
+          resultSet = preparedStatement.executeQuery();
+          result = resultSet.next();
+          if(result) {
+            order.requesterReviewRatings = resultSet.getInt("ratings");
+            order.requesterReview = resultSet.getString("comment");
+            order.requesterReviewTime = resultSet.getString("create_time");
+          }
+          preparedStatement = connect.prepareStatement("SELECT ratings, comment, create_time FROM comment WHERE oid = ? AND from_uid = ? LIMIT 1");
+          preparedStatement.setInt(1, oid);
+          preparedStatement.setInt(2, order.workerUID);
+          resultSet = preparedStatement.executeQuery();
+          result = resultSet.next();
+          if(result) {
+            order.workerReviewRatings = resultSet.getInt("ratings");
+            order.workerReview = resultSet.getString("comment");
+            order.workerReviewTime = resultSet.getString("create_time");
+          }
         }
       } catch (Exception e) {
         System.out.println(e);

@@ -131,7 +131,7 @@ textarea {
   max-width:365px;
   flex: 3;
 }
-.service .price, .ratings {
+.service .price, .service .ratings {
   flex: 1 1 0;
 
 }
@@ -169,7 +169,7 @@ textarea {
   max-width:365px;
   flex: 3;
 }
-.apply .price, .ratings {
+.apply .price, .apply .ratings {
   flex: 1 1 0;
 
 }
@@ -219,7 +219,7 @@ textarea {
   max-width:365px;
   flex: 3;
 }
-.request .price, .ratings {
+.request .price, .request .ratings {
   flex: 1 1 0;
 
 }
@@ -442,6 +442,36 @@ textarea {
   padding-bottom: 15px;
   font-size: 24px;
   font-weight:bold;
+}
+
+.review {
+  padding-top: 20px;
+}
+.review > .header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.review > .header > .avatar > img {
+  width: 60px;
+  height: 60px;
+}
+.review > .header > .info{
+  padding-left: 15px;
+}
+.review > .header > .info > .name{
+  padding-top: 3px;
+}
+.review > .header > .info > .ratings > .star {
+  color:  #ffa534;
+}
+.review > .header > .info > .time {
+  font-size: 14px;
+  color: #666;
+  padding-top: 3px;
+}
+.review > .comment {
+  padding-top:5px;
+  font-size: 16px;
 }
 a h1 {
   margin: 0;
