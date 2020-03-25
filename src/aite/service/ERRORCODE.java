@@ -58,11 +58,13 @@ public class ERRORCODE {
   public final static int WORKREQUEST_ID_EMPTY = 801;
   public final static int WORKREQUEST_ID_INVALID = 802;
   public final static int WORKREQUEST_SERVICE_NOT_EXIST = 803;
-  public final static int WORKREQUEST_ALREADY_REQUEST = 804;
-  public final static int WORKREQUEST_INSERT_ERROR = 805;
-  public final static int WORKREQUEST_EDIT_ERROR = 806;
-  public final static int WORKREQUEST_EXCEPTION = 807;
-  public final static int WORKREQUEST_UNAUTHORIED = 808;
+  public final static int WORKREQUEST_DESCRIPTION_EMPTY = 804;
+  public final static int WORKREQUEST_LOCATION_EMPTY = 805;
+  public final static int WORKREQUEST_ALREADY_REQUEST = 806;
+  public final static int WORKREQUEST_INSERT_ERROR = 807;
+  public final static int WORKREQUEST_EDIT_ERROR = 808;
+  public final static int WORKREQUEST_EXCEPTION = 809;
+  public final static int WORKREQUEST_UNAUTHORIED = 810;
   
   public final static int REQUESTCANCEL_ID_EMPTY = 901;
   public final static int REQUESTCANCEL_ID_INVALID = 902;
@@ -70,6 +72,15 @@ public class ERRORCODE {
   public final static int REQUESTCANCEL_REQUEST_NOT_EXIST = 904;
   public final static int REQUESTCANCEL_EXCEPTION = 905;
   public final static int REQUESTCANCEL_UNAUTHORIED = 906;
+  
+
+  public final static int ACCEPTREQUEST_ID_INVALID = 1001;
+  public final static int ACCEPTREQUEST_DELETE_ERROR = 1002;
+  public final static int ACCEPTREQUEST_INSERT_ERROR = 1003;
+  public final static int ACCEPTREQUEST_EXCEPTION = 1004;
+  public final static int ACCEPTREQUEST_UNAUTHORIED = 1005;
+  
+  
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -128,6 +139,8 @@ public class ERRORCODE {
       
       put(WORKREQUEST_ID_EMPTY, "ID cannot be empty!");
       put(WORKREQUEST_ID_INVALID, "Invalid ID!");
+      put(WORKREQUEST_DESCRIPTION_EMPTY, "Description cannot be empty!");
+      put(WORKREQUEST_LOCATION_EMPTY, "Location cannot be empty!");
       put(WORKREQUEST_SERVICE_NOT_EXIST, "Worker does not exist");
       put(WORKREQUEST_ALREADY_REQUEST, "You've requested!");
       put(WORKREQUEST_INSERT_ERROR, "Please try again later!");
@@ -142,6 +155,12 @@ public class ERRORCODE {
       put(REQUESTCANCEL_REQUEST_NOT_EXIST, "Request does not exist");
       put(REQUESTCANCEL_EXCEPTION, "Please try again later!");
       put(REQUESTCANCEL_UNAUTHORIED, "UNAUTHORIZED!");
+
+      put(ACCEPTREQUEST_ID_INVALID, "Invalid ID!");
+      put(ACCEPTREQUEST_DELETE_ERROR, "Please try again later!");
+      put(ACCEPTREQUEST_INSERT_ERROR, "Please try again later!");
+      put(ACCEPTREQUEST_EXCEPTION, "Please try again later!");
+      put(ACCEPTREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
     }};
 
     //put(, "");

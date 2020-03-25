@@ -19,7 +19,7 @@ import aite.service.ERRORCODE;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet({"/gigtasks", "/gigtasks/apply", "/gigtasks/apply_cancel"})
+@WebServlet({"/gigtasks", "/gigtasks/apply", "/gigtasks/apply_cancel", "/gigtasks/accept" })
 public class GigTasksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();

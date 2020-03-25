@@ -64,10 +64,8 @@
         </form>
         
         <% } else { %>
-        <form action="<%= request.getContextPath() + "/gigtasks/apply_accept" %>" method="post">
           <h1 class="page-title">ApplyList</h1>
-          <input type="hidden" name="tid" value="<%= task.tid%>">
-           <%
+          <%
 			      ArrayList<ApplyModel> applyList = (ArrayList<ApplyModel>) request.getAttribute("applyList");
 			      if(applyList != null) {
 			        for(int i = 0; i < applyList.size(); i++) {
@@ -86,13 +84,12 @@
 			          out.print(output);
 			        }
 			      }
-			      %>
+			    %>
           <% 
           if(errorMsg != null && errorMsg.length() > 0) {
             out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
           }
           %>
-        </form>
         <% } %>
       </div>
     </div>

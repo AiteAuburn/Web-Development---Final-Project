@@ -1,5 +1,4 @@
 package aite.service;
-import aite.model.WorkerModel;
 import aite.model.ApplyModel;
 import aite.model.TaskModel;
 import java.sql.DriverManager;

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import aite.model.RequestModel;
 import aite.model.WorkerModel;
 import aite.service.ERRORCODE;
 import aite.service.GigWorkerService;
@@ -14,7 +15,7 @@ import aite.service.UserService;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet({"/gigworkers", "/gigworkers/request", "/gigworkers/request_cancel"})
+@WebServlet({"/gigworkers", "/gigworkers/request", "/gigworkers/request_cancel", "/gigworkers/accept"})
 public class GigWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -38,11 +39,15 @@ public class GigWorkersServlet extends HttpServlet {
       if(accessToken == null) {
         response.sendRedirect(request.getContextPath());
       } else {
-        String sid = (String) request.getParameter("sid");
-        if(sid == null || sid.length() == 0) {
-          getServiceList(request, response);
+        if (request.getRequestURI().endsWith("/gigworkers/accept")) {
+          acceptReqeust(request, response);
         } else {
-          getService(sid, request, response);
+          String sid = (String) request.getParameter("sid");
+          if(sid == null || sid.length() == 0) {
+            getServiceList(request, response);
+          } else {
+            getService(sid, request, response);
+          }
         }
       }
 		
@@ -62,8 +67,15 @@ public class GigWorkersServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/page404.jsp").forward(request, response);
       } else {
         request.setAttribute("service", service);
+        int uid = (int) request.getAttribute("uid");
+        if( uid == service.uid ) {
+          ArrayList<RequestModel> rList = workerService.getRequestList(accessToken, sid);
+          request.setAttribute("requestList", rList);
+        }
         request.getRequestDispatcher("/WEB-INF/view/worker_detail.jsp").forward(request, response);
       }
+
+      
     }
 	protected void getServiceList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  ArrayList<WorkerModel> sList = workerService.getWorkerList();
@@ -92,7 +104,9 @@ public class GigWorkersServlet extends HttpServlet {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       String output;
       String sid = request.getParameter("sid");
-      int errorCode = workerService.requestWorker(accessToken, sid);
+      String location = request.getParameter("location");
+      String description = request.getParameter("description");
+      int errorCode = workerService.requestWorker(accessToken, sid, location, description);
       output = String.format("POST: /gigworkers/request [%d]", errorCode);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
@@ -116,5 +130,19 @@ public class GigWorkersServlet extends HttpServlet {
         getService(sid, request, response);
       }
     }
-
+    private void acceptReqeust(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String sid = request.getParameter("sid");
+      String rid = request.getParameter("rid");
+      int errorCode = workerService.acceptRequest(accessToken, rid);
+      output = String.format("GET: /gigworkers/accept?sid=%s&rid=%s [%d]", sid, rid, errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+      } else {
+        response.sendRedirect(String.format("%s/gigworkers?sid=%s", request.getContextPath(), sid));
+      }
+    }
 }

@@ -190,6 +190,52 @@ textarea {
 }
 
 
+.request {
+  padding: 10px 0 10px 0;
+}
+.requestList {
+  padding: 15px 0 15px 0;
+}
+.request > .avatar {
+  flex: 1;
+}
+.request > .avatar > img {
+  width: 100px;
+  height: 100px;
+}
+.request > .info{
+  max-width:365px;
+  flex: 3;
+}
+.request .price, .ratings {
+  flex: 1 1 0;
+
+}
+.request > .info {
+  padding-left: 15px;
+  padding-top: 10px;
+}
+.request > .info > .title {
+  font-size: 24px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+.request > .info > .time {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #666;
+}
+.request > .decision {
+  align-items: center;
+}
+
+.request > .decision > button.accept{
+  background-color: #00A000;
+}
+.request > .decision > button.decline{
+  background-color: #F30000;
+}
 .taskList {
   padding: 15px 0 15px 0;
 }
