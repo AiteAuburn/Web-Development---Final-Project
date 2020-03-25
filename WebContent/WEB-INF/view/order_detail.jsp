@@ -22,7 +22,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Register</title>
+    <title>Order Detail</title>
   </head>
   <body>
     <div class="container">

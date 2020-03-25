@@ -10,7 +10,7 @@ String errorMsg = (String) request.getAttribute("errorMsg");
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Register</title>
+    <title>New Task</title>
   </head>
   <body>
     <div class="container">

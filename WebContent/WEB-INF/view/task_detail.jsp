@@ -25,7 +25,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Register</title>
+    <title>Demand Request Detail</title>
   </head>
   <body>
     <div class="container">

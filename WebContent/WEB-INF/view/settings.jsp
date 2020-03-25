@@ -5,7 +5,7 @@
 <html>
 	<head>
 	  <%@ include file="../meta.jsp" %>  
-		<title>Available Gig Workers</title>
+		<title>Settings</title>
 	</head>
 	<body>
     <div class="container">
@@ -32,6 +32,9 @@
         </li>
         <li>
           <a href="${pageContext.request.contextPath}/user/comments">Received Reviews</a>
+        </li>
+        <li>
+          <a href="${pageContext.request.contextPath}/announcement">System Announcement</a>
         </li>
         <li>
           <a href="${pageContext.request.contextPath}/logout">Logout</a>

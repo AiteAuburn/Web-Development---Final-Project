@@ -6,7 +6,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Available Gig Tasks</title>
+    <title>My Tasks</title>
   </head>
   <body>
     <div class="container">

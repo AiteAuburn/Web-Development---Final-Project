@@ -18,7 +18,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Register</title>
+    <title>Worker detail</title>
   </head>
   <body>
     <div class="container">

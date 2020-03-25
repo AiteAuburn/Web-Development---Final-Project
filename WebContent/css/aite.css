@@ -477,6 +477,25 @@ textarea {
   padding-top:5px;
   font-size: 16px;
 }
+
+.announcement {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.announcement > .title {
+  font-size: 22px;
+  font-weight: bold;
+}
+.announcement > .time {
+  font-size: 14px;
+  color: #666;
+  padding-top: 3px;
+}
+.announcement > .content {
+  font-size: 16px;
+  padding-top: 3px;
+}
+
 a h1 {
   margin: 0;
 }

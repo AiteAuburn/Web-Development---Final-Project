@@ -22,7 +22,7 @@ import aite.service.ERRORCODE;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/user/orders", "/user/orders/review", "/user/comments", "/logout"})
+@WebServlet({"/announcement", "/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/user/orders", "/user/orders/review", "/user/comments", "/logout"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -62,6 +62,8 @@ public class UserServlet extends HttpServlet {
         getOrders(request, response);
       } else if (request.getRequestURI().endsWith("/user/comments") && uid > 0) {
         getComments(request, response);
+      } else if (request.getRequestURI().endsWith("/announcement")) {
+        getAnnouncements(request, response);
       } else if (request.getRequestURI().endsWith("/logout")) {
         doLogout(request, response);
       } else {
@@ -71,6 +73,10 @@ public class UserServlet extends HttpServlet {
 	protected void getLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  System.out.println("GET: /login");
       request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+    }
+    protected void getAnnouncements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /announcement");
+      request.getRequestDispatcher("/WEB-INF/view/announcement.jsp").forward(request, response);
     }
 	protected void getRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       System.out.println("GET: /register");

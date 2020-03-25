@@ -4,7 +4,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>New Task</title>
+    <title>New Task Success</title>
   </head>
   <body>
     <div class="container">

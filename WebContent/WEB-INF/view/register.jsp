@@ -4,7 +4,7 @@
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
-    <title>Change Password</title>
+    <title>Register</title>
   </head>
   <body>
     <div class="container">
