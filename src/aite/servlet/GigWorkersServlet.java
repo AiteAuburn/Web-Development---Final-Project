@@ -8,16 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import aite.model.ServiceModel;
-import aite.model.TaskModel;
-import aite.service.UserService;
-
+import aite.service.GigWorkerService;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet({"/gigworkers", "/gigworkers/*"})
+@WebServlet({"/gigworkers", "/gigworkers/apply"})
 public class GigWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private UserService userService = new UserService();
+    private GigWorkerService workerService = new GigWorkerService();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -53,25 +51,28 @@ public class GigWorkersServlet extends HttpServlet {
 		
 	}
 	protected void getService(int sid, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      ServiceModel service = userService.getService(sid);
+      ServiceModel service = workerService.getWorker(sid);
       if(service == null) {
-        request.getRequestDispatcher("WEB-INF/view/page404.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/page404.jsp").forward(request, response);
       } else {
         request.setAttribute("service", service);
-        request.getRequestDispatcher("WEB-INF/view/worker_detail.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/worker_detail.jsp").forward(request, response);
       }
     }
 	protected void getServiceList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  ArrayList<ServiceModel> sList = userService.getServiceList();
+	  ArrayList<ServiceModel> sList = workerService.getWorkerList();
 	  request.setAttribute("serviceList", sList);
-      request.getRequestDispatcher("WEB-INF/view/gigworkers.jsp").forward(request, response);
+      request.getRequestDispatcher("/WEB-INF/view/gigworkers.jsp").forward(request, response);
     }
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	  if (request.getRequestURI().endsWith("/apply")) {
+        //doLogin(request, response);
+	  } else {
 		doGet(request, response);
+      }
 	}
 
 }

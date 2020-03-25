@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class ERRORCODE {
   public final static int LOGIN_FAILED = 100;
   public final static int LOGIN_EXCEPTION = 101;
+  
   public final static int REGISTER_DUPLICATE_USERNAME = 200;
   public final static int REGISTER_INSERT_ERROR = 201;
   public final static int REGISTER_EXCEPTION = 202;
@@ -12,6 +13,7 @@ public class ERRORCODE {
   public final static int REGISTER_PWD_EMPTY = 204;
   public final static int REGISTER_FNAME_EMPTY = 205;
   public final static int REGISTER_LNAME_EMPTY = 206;
+  
   public final static int SERVICE_TITLE_EMPTY = 301;
   public final static int SERVICE_PRICE_EMPTY = 302;
   public final static int SERVICE_PRICE_INVALID = 302;
@@ -21,15 +23,37 @@ public class ERRORCODE {
   public final static int SERVICE_INSERT_ERROR = 306;
   public final static int SERVICE_EDIT_ERROR = 307;
   public final static int SERVICE_EXCEPTION = 308;
+  
   public final static int NEWTASK_TITLE_EMPTY = 401;
   public final static int NEWTASK_DESCRIPTION_EMPTY = 402;
   public final static int NEWTASK_INSERT_ERROR = 403;
   public final static int NEWTASK_EXCEPTION = 404;
+  public final static int NEWTASK_UNAUTHORIZED = 405;
+  
   public final static int CHPWD_SAME_PASSWORD = 501;
   public final static int CHPWD_CONFIRMPWD_ERROR = 502;
-  public final static int CHPWD_UNANTHORIZED = 503;
+  public final static int CHPWD_UNAUTHORIZED = 503;
   public final static int CHPWD_EXCEPTION = 504;
   public final static int CHPWD_PASSWORD_MISMATCH = 505;
+  
+  public final static int TASKAPPLY_TASKID_EMPTY = 601;
+  public final static int TASKAPPLY_PRICE_EMPTY = 602;
+  public final static int TASKAPPLY_TASKID_INVALID = 603;
+  public final static int TASKAPPLY_PRICE_INVALID = 604;
+  public final static int TASKAPPLY_INSERT_ERROR = 605;
+  public final static int TASKAPPLY_UPDATE_ERROR = 606;
+  public final static int TASKAPPLY_EXCEPTION = 607;
+  public final static int TASKAPPLY_UNAUTHORIED = 608;
+  public final static int TASKAPPLY_APPLY_EXIST = 609;
+  public final static int TASKAPPLY_TASK_NOT_EXIST = 610;
+  public final static int TASKAPPLY_TASK_CLOSED = 611;
+
+  public final static int TASKCANCEL_TASKID_EMPTY = 701;
+  public final static int TASKCANCEL_TASKID_INVALID = 702;
+  public final static int TASKCANCEL_CANCEL_ERROR = 703;
+  public final static int TASKCANCEL_OFFER_NOT_EXIST = 704;
+  public final static int TASKCANCEL_EXCEPTION = 705;
+  public final static int TASKCANCEL_UNAUTHORIED = 706;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
@@ -55,18 +79,40 @@ public class ERRORCODE {
       put(NEWTASK_DESCRIPTION_EMPTY, "Description cannot be empty!");
       put(NEWTASK_INSERT_ERROR, "Please try again later!");
       put(NEWTASK_EXCEPTION, "Please try again later!");
+      put(NEWTASK_UNAUTHORIZED, "UNAUTHORIZED!");
       put(CHPWD_SAME_PASSWORD, "Your new password is the same as old password.");
       put(CHPWD_CONFIRMPWD_ERROR, "Confirm password does not match");
-      put(CHPWD_UNANTHORIZED, "Unanthorized Action!");
+      put(CHPWD_UNAUTHORIZED, "UNAUTHORIZED!");
       put(CHPWD_EXCEPTION, "Please try again later!");
       put(CHPWD_PASSWORD_MISMATCH, "Old password does not match");
+      put(TASKAPPLY_TASKID_EMPTY, "Task does not exist");
+      put(TASKAPPLY_PRICE_EMPTY, "Price cannot be empty!");
+      put(TASKAPPLY_TASKID_INVALID, "Task does not exist");
+      put(TASKAPPLY_PRICE_INVALID, "Price must be numeric!");
+      put(TASKAPPLY_INSERT_ERROR, "Try again later!");
+      put(TASKAPPLY_UPDATE_ERROR, "Try again later!");
+      put(TASKAPPLY_EXCEPTION, "Please try again later!");
+      put(TASKAPPLY_UNAUTHORIED, "UNAUTHORIZED!");
+      put(TASKAPPLY_APPLY_EXIST, "You have already applied this task!");
+      put(TASKAPPLY_TASK_NOT_EXIST, "Task does not exist");
+      put(TASKAPPLY_TASK_CLOSED, "Task is closed.");
+      
+
+      put(TASKCANCEL_TASKID_EMPTY, "Task does not exist");
+      put(TASKCANCEL_TASKID_INVALID, "Task does not exist");
+      put(TASKCANCEL_CANCEL_ERROR, "Please try again later!");
+      put(TASKCANCEL_OFFER_NOT_EXIST, "Offer does not exist");
+      put(TASKCANCEL_EXCEPTION, "Please try again later!");
+      put(TASKCANCEL_UNAUTHORIED, "UNAUTHORIZED!");
     }};
 
     //put(, "");
 
     public static String getMsg(int errorCode) {
       String output = "";
-      if(errMsg.containsKey(errorCode))
+      if(errorCode == 0)
+        return output;
+      else if(errMsg.containsKey(errorCode))
         output = "Error: " + errMsg.get(errorCode);
       else
         output = "Unknown Error";

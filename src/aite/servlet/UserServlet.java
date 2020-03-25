@@ -1,8 +1,7 @@
 package aite.servlet;
-import aite.service.ERRORCODE;
-import aite.model.ServiceModel;
-import aite.service.UserService;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpSession;
@@ -10,13 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import aite.service.UserService;
+import aite.service.GigTaskService;
+import aite.service.GigWorkerService;
+
+import aite.model.ServiceModel;
+import aite.model.TaskModel;
+
+import aite.service.ERRORCODE;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/newTask", "/logout"})
+@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/logout"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
+    private GigWorkerService workerService = new GigWorkerService();
+    private GigTaskService taskService = new GigTaskService();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -37,6 +46,8 @@ public class UserServlet extends HttpServlet {
         getRegister(request, response);
       } else if (request.getRequestURI().endsWith("/settings") && uid > 0) {
         getSettings(request, response);
+      } else if (request.getRequestURI().endsWith("/user/tasks") && uid > 0) {
+        getMyTask(request, response);
       } else if (request.getRequestURI().endsWith("/user/newTask") && uid > 0) {
         getNewTask(request, response);
       } else if (request.getRequestURI().endsWith("/user/service") && uid > 0) {
@@ -50,22 +61,28 @@ public class UserServlet extends HttpServlet {
       }
 	}
 	protected void getLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  System.out.println("GET: /login");
       request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
     }
 	protected void getRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /register");
 	  request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
     }
 	protected void getSettings(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /settings");
       request.getRequestDispatcher("/WEB-INF/view/settings.jsp").forward(request, response);
     }
 	protected void getChpwd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /chpwd");
       request.getRequestDispatcher("/WEB-INF/view/chpwd.jsp").forward(request, response);
 	}
 	protected void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /logout");
       request.getSession().invalidate();
       response.sendRedirect(request.getContextPath());
     }
 	protected void getNewTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /user/newTask");
       request.getRequestDispatcher("/WEB-INF/view/new_task.jsp").forward(request, response);
     }
 	protected void getService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -95,14 +112,21 @@ public class UserServlet extends HttpServlet {
 		  response.sendRedirect(request.getContextPath());
 		}
 	}
-	
+
+    private void getMyTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /user/tasks");
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      ArrayList<TaskModel> tList = userService.getMyTaskList(accessToken);
+      request.setAttribute("taskList", tList);
+      request.getRequestDispatcher("/WEB-INF/view/user_tasks.jsp").forward(request, response);
+    }
 	private void newTask(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       String output;
       String title = request.getParameter("title");
       String location = request.getParameter("location");
       String description = request.getParameter("description");
-      int errorCode = userService.newTask(accessToken, title, location, description);
+      int errorCode = taskService.newTask(accessToken, title, location, description);
       output = String.format("POST: /user/newTask [%d] | accessToken: %s", errorCode, accessToken);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
@@ -122,7 +146,7 @@ public class UserServlet extends HttpServlet {
       String price = request.getParameter("price");
       String description = request.getParameter("description");
       String enabled = request.getParameter("enabled");
-      int errorCode = userService.editService(accessToken, title, price, description, enabled);
+      int errorCode = workerService.editService(accessToken, title, price, description, enabled);
       output = String.format("POST: /user/service [%d] | accessToken: %s", errorCode, accessToken);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));

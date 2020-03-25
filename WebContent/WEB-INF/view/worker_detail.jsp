@@ -5,6 +5,7 @@
 %>
 <%
 ServiceModel service = (ServiceModel) request.getAttribute("service");
+String errorMsg = (String) request.getAttribute("errorMsg");
 
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,7 +39,7 @@ ServiceModel service = (ServiceModel) request.getAttribute("service");
           <h3 class="score">4.9 &rarr;</h3>
         </div>
         
-        <form action="register" method="post">
+        <form action="${pageContext.request.contextPath}/gigworkers/apply" method="post">
           <input type="submit" value="Send Request ($<%= service.price %> / One Time)"/>
         </form>
       </div>

@@ -8,4 +8,6 @@ public class TaskModel {
   public String description;
   public String location;
   public String createTime;
+  public String applyStatus;
+  public float quote;
 }
