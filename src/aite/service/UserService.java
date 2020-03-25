@@ -1,5 +1,5 @@
 package aite.service;
-import aite.model.ServiceModel;
+import aite.model.WorkerModel;
 import aite.model.TaskModel;
 import java.sql.DriverManager;
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ public class UserService extends Service{
     return result;
   }
 
-  public ServiceModel getMyService(String accessToken) {
-    ServiceModel service = null;
+  public WorkerModel getMyService(String accessToken) {
+    WorkerModel service = null;
     int uid = getUIDbyToken(accessToken);
     if( uid > 0) {
       try {
@@ -47,7 +47,7 @@ public class UserService extends Service{
         resultSet = preparedStatement.executeQuery();
         boolean result = resultSet.next();
         if(result) {
-          service = new ServiceModel();
+          service = new WorkerModel();
           service.title = resultSet.getString("title");
           service.price = resultSet.getFloat("price");
           service.description = resultSet.getString("description");

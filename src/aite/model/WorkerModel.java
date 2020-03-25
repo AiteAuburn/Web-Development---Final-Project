@@ -1,7 +1,8 @@
 package aite.model;
 
-public class ServiceModel {
+public class WorkerModel {
   public int sid;
+  public int uid;
   public String name;
   public float ratings;
   public String title;

@@ -1,5 +1,5 @@
 package aite.service;
-import aite.model.ServiceModel;
+import aite.model.WorkerModel;
 import aite.model.TaskModel;
 import java.sql.Date;
 import java.sql.Connection;
@@ -19,33 +19,146 @@ import aite.service.DBCONFIG;
 import aite.service.ERRORCODE;
 public class GigWorkerService extends Service{
 
-  public ServiceModel getWorker(int sid) {
-    ServiceModel service = null;
+  public int requestWorker(String accessToken, String serviceId) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int sid = 0;
+    if( uid > 0 ) {
+      if( serviceId == null || serviceId.length() == 0 )
+        return ERRORCODE.WORKREQUEST_ID_EMPTY;
+      try {
+        sid = Integer.parseInt(serviceId);
+      } catch(Exception e) {
+        return ERRORCODE.WORKREQUEST_ID_INVALID;
+      }
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT price, status from service WHERE sid = ? AND enabled = 1 LIMIT 1");
+        preparedStatement.setInt(1, sid);
+        resultSet = preparedStatement.executeQuery();
+        boolean serviceExist = resultSet.next();
+        if (!serviceExist) {
+          errorCode = ERRORCODE.WORKREQUEST_SERVICE_NOT_EXIST;
+        } else {
+          float price = resultSet.getFloat("price");
+          preparedStatement = connect.prepareStatement("SELECT rid from request WHERE sid = ? AND request_uid = ? LIMIT 1");
+          preparedStatement.setInt(1, sid);
+          preparedStatement.setInt(2, uid);
+          resultSet = preparedStatement.executeQuery();
+          boolean requestExist = resultSet.next();
+          if (requestExist) {
+            // record exist, then tell user he/she has applied
+            errorCode = ERRORCODE.WORKREQUEST_ALREADY_REQUEST;
+          } else {
+            preparedStatement = connect.prepareStatement("INSERT INTO rid (sid, request_uid, price) VALUES (?, ?, ?)");
+            preparedStatement.setInt(1, sid);
+            preparedStatement.setInt(2, uid);
+            preparedStatement.setFloat(3, price);
+            int result = preparedStatement.executeUpdate();
+            if(result > 0) {
+              // Query Success
+            } else {
+              // Query failed
+              errorCode = ERRORCODE.WORKREQUEST_INSERT_ERROR;
+            }
+          }
+        }
+      } catch (Exception e) {
+        errorCode = ERRORCODE.WORKREQUEST_EXCEPTION;
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.WORKREQUEST_UNAUTHORIED;
+    }
+    
+    return errorCode;
+  }
+
+  public int cancelRequest(String accessToken, String serviceId) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int sid = 0;
+    if( uid > 0 ) {
+      if( serviceId == null || serviceId.length() == 0 )
+        return ERRORCODE.REQUESTCANCEL_ID_EMPTY;
+      try {
+        sid = Integer.parseInt(serviceId);
+      } catch(Exception e) {
+        return ERRORCODE.REQUESTCANCEL_ID_INVALID;
+      }
+      
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT rid from request WHERE sid = ? AND request_uid = ? LIMIT 1");
+        preparedStatement.setInt(1, sid);
+        preparedStatement.setInt(2, uid);
+        resultSet = preparedStatement.executeQuery();
+        boolean recordExist = resultSet.next();
+        if (recordExist) {
+          int rid = resultSet.getInt("rid");
+          preparedStatement = connect.prepareStatement("UPDATE request SET status = 'c' WHERE rid = ?");
+          preparedStatement.setInt(1, rid);
+          int result = preparedStatement.executeUpdate();
+          if(result > 0) {
+            // Query Success
+          } else {
+            // Query failed
+            errorCode = ERRORCODE.REQUESTCANCEL_CANCEL_ERROR;
+          }
+        } else {
+          errorCode = ERRORCODE.REQUESTCANCEL_REQUEST_NOT_EXIST;
+        }
+        
+      } catch (Exception e) {
+        errorCode = ERRORCODE.REQUESTCANCEL_EXCEPTION;
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.REQUESTCANCEL_UNAUTHORIED;
+    }
+    
+    return errorCode;
+  }
+  
+  
+  
+  public WorkerModel getWorker(int sid) {
+    WorkerModel worker = null;
     try {
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT fname, lname, title, price, description, enabled from service s, user u WHERE sid = ? AND s.uid = u.uid LIMIT 1");
+      preparedStatement = connect.prepareStatement("SELECT s.uid, fname, lname, title, price, description, enabled from service s, user u WHERE sid = ? AND s.uid = u.uid LIMIT 1");
       preparedStatement.setInt(1, sid);
       resultSet = preparedStatement.executeQuery();
       boolean result = resultSet.next();
       if(result) {
-        service = new ServiceModel();
-        service.title = resultSet.getString("title");
-        service.name = resultSet.getString("fname") + resultSet.getString("lname");
-        service.price = resultSet.getFloat("price");
-        service.description = resultSet.getString("description");
-        service.enabled = resultSet.getBoolean("enabled");
+        worker = new WorkerModel();
+        worker.sid =  sid;
+        worker.uid =  resultSet.getInt("uid");
+        worker.title = resultSet.getString("title");
+        worker.name = resultSet.getString("fname") + resultSet.getString("lname");
+        worker.price = resultSet.getFloat("price");
+        worker.description = resultSet.getString("description");
+        worker.enabled = resultSet.getBoolean("enabled");
       }
     } catch (Exception e) {
       System.out.println(e);
     } finally {
       close();
     }
-    return service;
+    return worker;
   }
-  public ArrayList<ServiceModel> getWorkerList(){
-    ArrayList<ServiceModel> result = new ArrayList<ServiceModel>();
+  public ArrayList<WorkerModel> getWorkerList(){
+    ArrayList<WorkerModel> result = new ArrayList<WorkerModel>();
     try {
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
@@ -53,14 +166,14 @@ public class GigWorkerService extends Service{
       preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled from service s, user u WHERE u.uid = s.uid AND enabled = 1");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
-        ServiceModel service = new ServiceModel();
-        service.sid = resultSet.getInt("sid");
-        service.name = resultSet.getString("fname") + resultSet.getString("lname");
-        service.title = resultSet.getString("title");
-        service.price = resultSet.getFloat("price");
-        service.description = resultSet.getString("description");
-        service.enabled = resultSet.getBoolean("enabled");
-        result.add(service);
+        WorkerModel worker = new WorkerModel();
+        worker.sid = resultSet.getInt("sid");
+        worker.name = resultSet.getString("fname") + resultSet.getString("lname");
+        worker.title = resultSet.getString("title");
+        worker.price = resultSet.getFloat("price");
+        worker.description = resultSet.getString("description");
+        worker.enabled = resultSet.getBoolean("enabled");
+        result.add(worker);
       }
     } catch (Exception e) {
       System.out.println(e);

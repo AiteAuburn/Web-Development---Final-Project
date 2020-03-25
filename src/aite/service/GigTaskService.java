@@ -1,60 +1,10 @@
 package aite.service;
-import aite.model.ServiceModel;
+import aite.model.WorkerModel;
 import aite.model.ApplyModel;
 import aite.model.TaskModel;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 public class GigTaskService extends Service{
-  public int cancelOffer(String accessToken, String tid) {
-    int errorCode = 0;
-    int uid = getUIDbyToken(accessToken);
-    int intTaskId = 0;
-    if( uid > 0 ) {
-      if( tid == null || tid.length() == 0 )
-        return ERRORCODE.TASKCANCEL_TASKID_EMPTY;
-      try {
-        intTaskId = Integer.parseInt(tid);
-      } catch(Exception e) {
-        return ERRORCODE.TASKCANCEL_TASKID_INVALID;
-      }
-      
-      try {
-        Class.forName("com.mysql.jdbc.Driver");
-        connect = DriverManager.getConnection(connectionStr);
-        statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT 1 from apply WHERE tid = ? AND apply_uid = ? LIMIT 1");
-        preparedStatement.setInt(1, intTaskId);
-        preparedStatement.setInt(2, uid);
-        resultSet = preparedStatement.executeQuery();
-        boolean recordExist = resultSet.next();
-        if (recordExist) {
-          preparedStatement = connect.prepareStatement("UPDATE apply SET status = 'c' WHERE tid = ? AND apply_uid = ?");
-          preparedStatement.setInt(1, intTaskId);
-          preparedStatement.setInt(2, uid);
-          int result = preparedStatement.executeUpdate();
-          if(result > 0) {
-            // Query Success
-          } else {
-            // Query failed
-            errorCode = ERRORCODE.TASKCANCEL_CANCEL_ERROR;
-          }
-        } else {
-          errorCode = ERRORCODE.TASKCANCEL_OFFER_NOT_EXIST;
-        }
-        
-      } catch (Exception e) {
-        errorCode = ERRORCODE.TASKCANCEL_EXCEPTION;
-        System.out.println(e);
-      } finally {
-        close();
-      }
-    } else {
-      errorCode = ERRORCODE.TASKCANCEL_UNAUTHORIED;
-    }
-    
-    return errorCode;
-  }
-  
 
   public ArrayList<ApplyModel> getApplyList(String accessToken, int tid){
     ArrayList<ApplyModel> result = new ArrayList<ApplyModel>();
@@ -120,7 +70,6 @@ public class GigTaskService extends Service{
         preparedStatement.setInt(1, intTaskId);
         resultSet = preparedStatement.executeQuery();
         boolean taskExist = resultSet.next();
-        System.out.println("price??" + floatPrice);
         if (!taskExist) {
           errorCode = ERRORCODE.TASKAPPLY_TASK_NOT_EXIST;
         } else {
@@ -180,6 +129,57 @@ public class GigTaskService extends Service{
     
     return errorCode;
   }
+
+  public int cancelOffer(String accessToken, String tid) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    int intTaskId = 0;
+    if( uid > 0 ) {
+      if( tid == null || tid.length() == 0 )
+        return ERRORCODE.TASKCANCEL_TASKID_EMPTY;
+      try {
+        intTaskId = Integer.parseInt(tid);
+      } catch(Exception e) {
+        return ERRORCODE.TASKCANCEL_TASKID_INVALID;
+      }
+      
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT 1 from apply WHERE tid = ? AND apply_uid = ? LIMIT 1");
+        preparedStatement.setInt(1, intTaskId);
+        preparedStatement.setInt(2, uid);
+        resultSet = preparedStatement.executeQuery();
+        boolean recordExist = resultSet.next();
+        if (recordExist) {
+          preparedStatement = connect.prepareStatement("UPDATE apply SET status = 'c' WHERE tid = ? AND apply_uid = ?");
+          preparedStatement.setInt(1, intTaskId);
+          preparedStatement.setInt(2, uid);
+          int result = preparedStatement.executeUpdate();
+          if(result > 0) {
+            // Query Success
+          } else {
+            // Query failed
+            errorCode = ERRORCODE.TASKCANCEL_CANCEL_ERROR;
+          }
+        } else {
+          errorCode = ERRORCODE.TASKCANCEL_OFFER_NOT_EXIST;
+        }
+        
+      } catch (Exception e) {
+        errorCode = ERRORCODE.TASKCANCEL_EXCEPTION;
+        System.out.println(e);
+      } finally {
+        close();
+      }
+    } else {
+      errorCode = ERRORCODE.TASKCANCEL_UNAUTHORIED;
+    }
+    
+    return errorCode;
+  }
+  
   public int newTask(String accessToken, String title, String location, String description) {
     int errorCode = 0;
     int uid = getUIDbyToken(accessToken);

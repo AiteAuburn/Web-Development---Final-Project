@@ -54,11 +54,27 @@ public class ERRORCODE {
   public final static int TASKCANCEL_OFFER_NOT_EXIST = 704;
   public final static int TASKCANCEL_EXCEPTION = 705;
   public final static int TASKCANCEL_UNAUTHORIED = 706;
+  
+  public final static int WORKREQUEST_ID_EMPTY = 801;
+  public final static int WORKREQUEST_ID_INVALID = 802;
+  public final static int WORKREQUEST_SERVICE_NOT_EXIST = 803;
+  public final static int WORKREQUEST_ALREADY_REQUEST = 804;
+  public final static int WORKREQUEST_INSERT_ERROR = 805;
+  public final static int WORKREQUEST_EXCEPTION = 806;
+  public final static int WORKREQUEST_UNAUTHORIED = 807;
+  
+  public final static int REQUESTCANCEL_ID_EMPTY = 901;
+  public final static int REQUESTCANCEL_ID_INVALID = 902;
+  public final static int REQUESTCANCEL_CANCEL_ERROR = 903;
+  public final static int REQUESTCANCEL_REQUEST_NOT_EXIST = 904;
+  public final static int REQUESTCANCEL_EXCEPTION = 905;
+  public final static int REQUESTCANCEL_UNAUTHORIED = 906;
   public final static HashMap<Integer, String> errMsg = new HashMap<Integer, String>() {
     {
       put(0, "");
       put(LOGIN_FAILED, "Invalid username or password!");
       put(LOGIN_EXCEPTION, "Please try again later!");
+      
       put(REGISTER_DUPLICATE_USERNAME, "The username is already taken.");
       put(REGISTER_INSERT_ERROR, "Please try again later!");
       put(REGISTER_EXCEPTION, "Please try again later!");
@@ -66,6 +82,7 @@ public class ERRORCODE {
       put(REGISTER_PWD_EMPTY, "Password cannot be empty!");
       put(REGISTER_FNAME_EMPTY, "First Name cannot be empty.");
       put(REGISTER_LNAME_EMPTY, "Last Name cannot be empty!");
+      
       put(SERVICE_TITLE_EMPTY, "Title cannot be empty!");
       put(SERVICE_PRICE_EMPTY, "Price cannot be empty!");
       put(SERVICE_PRICE_INVALID, "Price must be numeric");
@@ -75,16 +92,19 @@ public class ERRORCODE {
       put(SERVICE_INSERT_ERROR, "Please try again later!");
       put(SERVICE_EDIT_ERROR, "Please try again later!");
       put(SERVICE_EXCEPTION, "Please try again later!");
+      
       put(NEWTASK_TITLE_EMPTY, "Title cannot be empty!");
       put(NEWTASK_DESCRIPTION_EMPTY, "Description cannot be empty!");
       put(NEWTASK_INSERT_ERROR, "Please try again later!");
       put(NEWTASK_EXCEPTION, "Please try again later!");
       put(NEWTASK_UNAUTHORIZED, "UNAUTHORIZED!");
+      
       put(CHPWD_SAME_PASSWORD, "Your new password is the same as old password.");
       put(CHPWD_CONFIRMPWD_ERROR, "Confirm password does not match");
       put(CHPWD_UNAUTHORIZED, "UNAUTHORIZED!");
       put(CHPWD_EXCEPTION, "Please try again later!");
       put(CHPWD_PASSWORD_MISMATCH, "Old password does not match");
+      
       put(TASKAPPLY_TASKID_EMPTY, "Task does not exist");
       put(TASKAPPLY_PRICE_EMPTY, "Price cannot be empty!");
       put(TASKAPPLY_TASKID_INVALID, "Task does not exist");
@@ -104,6 +124,22 @@ public class ERRORCODE {
       put(TASKCANCEL_OFFER_NOT_EXIST, "Offer does not exist");
       put(TASKCANCEL_EXCEPTION, "Please try again later!");
       put(TASKCANCEL_UNAUTHORIED, "UNAUTHORIZED!");
+      
+      put(WORKREQUEST_ID_EMPTY, "ID cannot be empty!");
+      put(WORKREQUEST_ID_INVALID, "Invalid ID!");
+      put(WORKREQUEST_SERVICE_NOT_EXIST, "Worker does not exist");
+      put(WORKREQUEST_ALREADY_REQUEST, "You've requested!");
+      put(WORKREQUEST_INSERT_ERROR, "Please try again later!");
+      put(WORKREQUEST_EXCEPTION, "Please try again later!");
+      put(WORKREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
+      
+
+      put(REQUESTCANCEL_ID_EMPTY, "ID cannot be empty!");
+      put(REQUESTCANCEL_ID_INVALID, "Invalid ID!");
+      put(REQUESTCANCEL_CANCEL_ERROR, "Please try again later!");
+      put(REQUESTCANCEL_REQUEST_NOT_EXIST, "Request does not exist");
+      put(REQUESTCANCEL_EXCEPTION, "Please try again later!");
+      put(REQUESTCANCEL_UNAUTHORIED, "UNAUTHORIZED!");
     }};
 
     //put(, "");

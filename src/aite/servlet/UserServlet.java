@@ -13,7 +13,7 @@ import aite.service.UserService;
 import aite.service.GigTaskService;
 import aite.service.GigWorkerService;
 
-import aite.model.ServiceModel;
+import aite.model.WorkerModel;
 import aite.model.TaskModel;
 
 import aite.service.ERRORCODE;
@@ -87,7 +87,7 @@ public class UserServlet extends HttpServlet {
     }
 	protected void getService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
-	  ServiceModel n = userService.getMyService(accessToken);
+	  WorkerModel n = userService.getMyService(accessToken);
       request.setAttribute("defaultTitle", n.title);
       request.setAttribute("defaultPrice", String.valueOf(n.price));
       request.setAttribute("defaultDescription", n.description);

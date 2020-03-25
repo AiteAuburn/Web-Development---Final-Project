@@ -15,7 +15,7 @@ public class Service{
     if(accessToken == null || accessToken.length() == 0)
       return -1;
     else 
-      return 1;
+      return 2;
   }
   // You need to close the resultSet
   protected void close() {
