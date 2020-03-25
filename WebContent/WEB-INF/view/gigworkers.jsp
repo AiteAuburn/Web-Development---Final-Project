@@ -30,7 +30,7 @@
 		  	        output += "<div class='name'>" + service.name + "</div>";
 		  	        output += "<div class='row'>";
 		  	        output += "<div class='price'> $" + service.price + "</div>";
-		  	        output += "<div class='ratings'>" + service.ratings + "</div>";
+		  	        output += "<div class='ratings'><span class=\"star\">&#x2605</span>" + service.ratings + "</div>";
 		  	        output += "</div>";
 		  	        output += "</div>";
 		  			    output += "</div>";

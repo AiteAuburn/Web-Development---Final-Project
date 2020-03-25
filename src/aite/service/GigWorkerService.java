@@ -290,7 +290,9 @@ public class GigWorkerService extends Service{
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection(connectionStr);
         statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT s.uid, r.status as requestStatus, r.location as requestLocation, r.description as requestDescription, rid, fname, lname, title, s.price, s.description, enabled from service s " + 
+        preparedStatement = connect.prepareStatement("SELECT s.uid, r.status as requestStatus, r.location as requestLocation, r.description as requestDescription, rid, fname, lname, title, s.price, s.description, enabled, SUM(ratings)/COUNT(ratings) as ratings from service s " + 
+            "LEFT JOIN comment c " + 
+            "ON c.to_uid = s.uid " + 
             "LEFT JOIN user u " + 
             "ON s.uid = u.uid " + 
             "LEFT JOIN request r " + 
@@ -309,6 +311,7 @@ public class GigWorkerService extends Service{
           worker.name = resultSet.getString("fname") + resultSet.getString("lname");
           worker.price = resultSet.getFloat("price");
           worker.description = resultSet.getString("description");
+          worker.ratings = resultSet.getFloat("ratings");
           worker.enabled = resultSet.getBoolean("enabled");
           worker.requestStatus = resultSet.getString("requestStatus");
           worker.requestLocation = resultSet.getString("requestLocation");
@@ -328,13 +331,14 @@ public class GigWorkerService extends Service{
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled from service s, user u WHERE u.uid = s.uid AND enabled = 1");
+      preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled, SUM(ratings)/COUNT(ratings) as ratings FROM service s, user u LEFT JOIN comment c ON c.to_uid = u.uid WHERE u.uid = s.uid AND enabled = 1 GROUP BY u.uid");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
         WorkerModel worker = new WorkerModel();
         worker.sid = resultSet.getInt("sid");
         worker.name = resultSet.getString("fname") + resultSet.getString("lname");
         worker.title = resultSet.getString("title");
+        worker.ratings = resultSet.getFloat("ratings");
         worker.price = resultSet.getFloat("price");
         worker.description = resultSet.getString("description");
         worker.enabled = resultSet.getBoolean("enabled");

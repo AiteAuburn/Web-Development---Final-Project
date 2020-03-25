@@ -135,6 +135,10 @@ textarea {
   flex: 1 1 0;
 
 }
+.service .ratings > .star {
+  color:  #ffa534;
+  padding-right: 5px;
+}
 .service > .info {
   padding-left: 15px;
   padding-top: 10px;
