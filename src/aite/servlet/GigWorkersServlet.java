@@ -48,6 +48,7 @@ public class GigWorkersServlet extends HttpServlet {
 		
 	}
 	protected void getService(String serviceId, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int sid = -1;
       try {
         sid = Integer.parseInt(serviceId);
@@ -56,7 +57,7 @@ public class GigWorkersServlet extends HttpServlet {
       {
         
       }
-      WorkerModel service = workerService.getWorker(sid);
+      WorkerModel service = workerService.getWorker(accessToken, sid);
       if(service == null) {
         request.getRequestDispatcher("/WEB-INF/view/page404.jsp").forward(request, response);
       } else {
@@ -73,6 +74,9 @@ public class GigWorkersServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  response.setHeader("Cache-Control","no-cache"); 
+	  response.setHeader("Pragma","no-cache"); 
+	  response.setDateHeader ("Expires", -1); 
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);

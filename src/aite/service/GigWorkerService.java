@@ -35,7 +35,7 @@ public class GigWorkerService extends Service{
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection(connectionStr);
         statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT price, status from service WHERE sid = ? AND enabled = 1 LIMIT 1");
+        preparedStatement = connect.prepareStatement("SELECT price from service WHERE sid = ? AND enabled = 1 LIMIT 1");
         preparedStatement.setInt(1, sid);
         resultSet = preparedStatement.executeQuery();
         boolean serviceExist = resultSet.next();
@@ -49,10 +49,20 @@ public class GigWorkerService extends Service{
           resultSet = preparedStatement.executeQuery();
           boolean requestExist = resultSet.next();
           if (requestExist) {
+            int rid = resultSet.getInt("rid");
             // record exist, then tell user he/she has applied
-            errorCode = ERRORCODE.WORKREQUEST_ALREADY_REQUEST;
+            preparedStatement = connect.prepareStatement("UPDATE request SET price = ?, status = 'o' WHERE rid = ?");
+            preparedStatement.setFloat(1, price);
+            preparedStatement.setInt(2, rid);
+            int result = preparedStatement.executeUpdate();
+            if(result > 0) {
+              // Query Success
+            } else {
+              // Query failed
+              errorCode = ERRORCODE.WORKREQUEST_EDIT_ERROR;
+            }
           } else {
-            preparedStatement = connect.prepareStatement("INSERT INTO rid (sid, request_uid, price) VALUES (?, ?, ?)");
+            preparedStatement = connect.prepareStatement("INSERT INTO request (sid, request_uid, price) VALUES (?, ?, ?)");
             preparedStatement.setInt(1, sid);
             preparedStatement.setInt(2, uid);
             preparedStatement.setFloat(3, price);
@@ -130,30 +140,41 @@ public class GigWorkerService extends Service{
   
   
   
-  public WorkerModel getWorker(int sid) {
+  public WorkerModel getWorker(String accessToken, int sid) {
     WorkerModel worker = null;
-    try {
-      Class.forName("com.mysql.jdbc.Driver");
-      connect = DriverManager.getConnection(connectionStr);
-      statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT s.uid, fname, lname, title, price, description, enabled from service s, user u WHERE sid = ? AND s.uid = u.uid LIMIT 1");
-      preparedStatement.setInt(1, sid);
-      resultSet = preparedStatement.executeQuery();
-      boolean result = resultSet.next();
-      if(result) {
-        worker = new WorkerModel();
-        worker.sid =  sid;
-        worker.uid =  resultSet.getInt("uid");
-        worker.title = resultSet.getString("title");
-        worker.name = resultSet.getString("fname") + resultSet.getString("lname");
-        worker.price = resultSet.getFloat("price");
-        worker.description = resultSet.getString("description");
-        worker.enabled = resultSet.getBoolean("enabled");
+    int uid = getUIDbyToken(accessToken);
+    if( uid > 0 ) {
+      try {
+        Class.forName("com.mysql.jdbc.Driver");
+        connect = DriverManager.getConnection(connectionStr);
+        statement = connect.createStatement();
+        preparedStatement = connect.prepareStatement("SELECT s.uid, r.status as requestStatus, rid, fname, lname, title, s.price, description, enabled from service s " + 
+            "LEFT JOIN user u " + 
+            "ON s.uid = u.uid " + 
+            "LEFT JOIN request r " + 
+            "ON r.request_uid = ? " + 
+            "WHERE s.sid = ? LIMIT 1");
+        preparedStatement.setInt(1, uid);
+        preparedStatement.setInt(2, sid);
+        resultSet = preparedStatement.executeQuery();
+        boolean result = resultSet.next();
+        if(result) {
+          worker = new WorkerModel();
+          worker.sid =  sid;
+          worker.rid =  resultSet.getInt("rid");
+          worker.uid =  resultSet.getInt("uid");
+          worker.title = resultSet.getString("title");
+          worker.name = resultSet.getString("fname") + resultSet.getString("lname");
+          worker.price = resultSet.getFloat("price");
+          worker.description = resultSet.getString("description");
+          worker.enabled = resultSet.getBoolean("enabled");
+          worker.requestStatus = resultSet.getString("requestStatus");
+        }
+      } catch (Exception e) {
+        System.out.println(e);
+      } finally {
+        close();
       }
-    } catch (Exception e) {
-      System.out.println(e);
-    } finally {
-      close();
     }
     return worker;
   }

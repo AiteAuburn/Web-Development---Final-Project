@@ -38,10 +38,21 @@ String errorMsg = (String) request.getAttribute("errorMsg");
           <h3 class="star">&#x2605</h3>
           <h3 class="score">4.9 &rarr;</h3>
         </div>
-        <% if ( uid != service.uid) { %>
-	        <form action="${pageContext.request.contextPath}/gigworkers/request" method="post">
-	          <input type="submit" value="Send Request ($<%= service.price %> / One Time)"/>
+          <% 
+          if(errorMsg != null && errorMsg.length() > 0) {
+            out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
+          }
+          %>
+        <% if ( service.rid != 0 && service.requestStatus.equalsIgnoreCase("o") ) { %>
+	        <form action="${pageContext.request.contextPath}/gigworkers/request_cancel" method="post">
+            <input type="hidden" name="sid" value="<%= service.sid%>"/>
+	          <input type="submit" value="Cancel Request"/>
 	        </form>
+	      <% } else if ( uid != service.uid ) { %>
+          <form action="${pageContext.request.contextPath}/gigworkers/request" method="post">
+            <input type="hidden" name="sid" value="<%= service.sid%>"/>
+            <input type="submit" value="Send Request ($<%= service.price %> / One Time)"/>
+          </form>
         <% } else { %>
           <h1 class="page-title">Request List</h1>
         <% } %>

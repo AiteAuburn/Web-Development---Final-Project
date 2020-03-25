@@ -60,8 +60,9 @@ public class ERRORCODE {
   public final static int WORKREQUEST_SERVICE_NOT_EXIST = 803;
   public final static int WORKREQUEST_ALREADY_REQUEST = 804;
   public final static int WORKREQUEST_INSERT_ERROR = 805;
-  public final static int WORKREQUEST_EXCEPTION = 806;
-  public final static int WORKREQUEST_UNAUTHORIED = 807;
+  public final static int WORKREQUEST_EDIT_ERROR = 806;
+  public final static int WORKREQUEST_EXCEPTION = 807;
+  public final static int WORKREQUEST_UNAUTHORIED = 808;
   
   public final static int REQUESTCANCEL_ID_EMPTY = 901;
   public final static int REQUESTCANCEL_ID_INVALID = 902;
@@ -130,6 +131,7 @@ public class ERRORCODE {
       put(WORKREQUEST_SERVICE_NOT_EXIST, "Worker does not exist");
       put(WORKREQUEST_ALREADY_REQUEST, "You've requested!");
       put(WORKREQUEST_INSERT_ERROR, "Please try again later!");
+      put(WORKREQUEST_EDIT_ERROR, "Please try again later!");
       put(WORKREQUEST_EXCEPTION, "Please try again later!");
       put(WORKREQUEST_UNAUTHORIED, "UNAUTHORIZED!");
       

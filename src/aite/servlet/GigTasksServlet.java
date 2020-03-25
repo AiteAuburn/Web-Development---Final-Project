@@ -83,6 +83,9 @@ public class GigTasksServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  response.setHeader("Cache-Control","no-cache"); 
+      response.setHeader("Pragma","no-cache"); 
+      response.setDateHeader ("Expires", -1); 
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);
@@ -94,6 +97,21 @@ public class GigTasksServlet extends HttpServlet {
         doGet(request, response);
       }
 	}
+    private void doApply(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String tid = request.getParameter("tid");
+      String price = request.getParameter("price");
+      int errorCode = taskService.applyTask(accessToken, tid, price);
+      output = String.format("POST: /gigtasks/apply [%d]", errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+      } else {
+        getTask(tid, request, response);
+      }
+    }
 	private void doCancel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       String output;
@@ -109,20 +127,4 @@ public class GigTasksServlet extends HttpServlet {
       }
     }
 	
-	private void doApply(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
-      String output;
-      String tid = request.getParameter("tid");
-      String price = request.getParameter("price");
-      int errorCode = taskService.applyTask(accessToken,tid, price);
-      output = String.format("POST: /gigtasks/apply [%d]", errorCode);
-      System.out.println(output);
-      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
-      if(errorCode == 0) {
-        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
-      } else {
-        getTask(tid, request, response);
-        
-      }
-    }
 }

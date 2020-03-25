@@ -8,5 +8,7 @@ public class WorkerModel {
   public String title;
   public float price;
   public String description;
+  public int rid;
+  public String requestStatus;
   public boolean enabled;
 }
