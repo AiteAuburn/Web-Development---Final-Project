@@ -1,17 +1,43 @@
 <announcementList>
-	<announcement>
+  <announcement>
     <aid>1</aid>
-    <title>COVID 2019</title>
-    <time>March 25, 2020</time>
-    <content>The U.S. Food and Drug Administration continues to play a critical role in the multifaceted all-of-government response to the COVID-19 pandemic, which includes, among other things, facilitating medical countermeasures to treat and prevent the disease, and surveilling the medical product and food supply chains for potential shortages or disruptions and helping to mitigate such impacts, as necessary.
+    <title>What's difference about this app</title>
+    <time>March 14, 2020</time>
+    <content>What makes the app different is this fully utilize your lesiure time to earn money. You can kill your time by offering gig services and earn money.
+    </content>
+  </announcement>
+
+
+  <announcement>
+    <aid>2</aid>
+    <title>New Store</title>
+    <time>March 16, 2020</time>
+    <content>In fact, we are opening a new store in Auburn. We invite you to celebrate with us during the big opening day on Apr 1. There will be many exciting surprises, including irresistible discounts.
+    </content>
+  </announcement>
+
+
+	<announcement>
+    <aid>3</aid>
+    <title>Supporting you during the Coronavirus</title>
+    <time>March 17, 2020</time>
+    <content>Are you feel unsafe during the gig worktime by the coronavirus? Call this number (000) 000-0000 to get free face masks and isolation gowns, so you won't be affected during the work!
     </content>
   </announcement>
 	
   <announcement>
-    <aid>2</aid>
-    <title>COVID 2019</title>
-    <time>March 25, 2020</time>
-    <content>The U.S. Food and Drug Administration continues to play a critical role in the multifaceted all-of-government response to the COVID-19 pandemic, which includes, among other things, facilitating medical countermeasures to treat and prevent the disease, and surveilling the medical product and food supply chains for potential shortages or disruptions and helping to mitigate such impacts, as necessary.
+    <aid>3</aid>
+    <title>Invitation Promo Code</title>
+    <time>March 21, 2020</time>
+    <content>Every time your friend signs up with your invite code, you will get an extra $25 off promo code!
+    </content>
+  </announcement>
+
+  <announcement>
+    <aid>4</aid>
+    <title>Multi-language Support</title>
+    <time>March 24, 2020</time>
+    <content>In a near future, we plan to expand our app vailable worldwide. Stay tuned for the latest news!
     </content>
   </announcement>
 </announcementList>

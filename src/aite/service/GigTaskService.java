@@ -374,7 +374,7 @@ public class GigTaskService extends Service{
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT tid, t.uid, lname, fname, title, create_time from task t, user u WHERE t.uid = u.uid AND status = 'o'");
+      preparedStatement = connect.prepareStatement("SELECT tid, t.uid, lname, fname, title, create_time from task t, user u WHERE t.uid = u.uid AND status = 'o' ORDER BY create_time DESC");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
         TaskModel task = new TaskModel();

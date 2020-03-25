@@ -4,6 +4,7 @@
 <xsl:template match="announcementList">
   <div class="announcementList">
     <xsl:for-each select="announcement">
+      <xsl:sort select="position()" data-type="number" order="descending"/>
       <xsl:variable name="i" select="position()"/>
       <div class="announcement">
         <div class="title"><xsl:value-of select="title" /></div>

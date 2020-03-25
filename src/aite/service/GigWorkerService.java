@@ -331,7 +331,7 @@ public class GigWorkerService extends Service{
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled, SUM(ratings)/COUNT(ratings) as ratings FROM service s, user u LEFT JOIN comment c ON c.to_uid = u.uid WHERE u.uid = s.uid AND enabled = 1 GROUP BY u.uid");
+      preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled, SUM(ratings)/COUNT(ratings) as ratings FROM service s, user u LEFT JOIN comment c ON c.to_uid = u.uid WHERE u.uid = s.uid AND enabled = 1 GROUP BY u.uid ORDER BY s.sid DESC");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
         WorkerModel worker = new WorkerModel();
