@@ -11,20 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import aite.service.UserService;
 import aite.service.GigTaskService;
 import aite.service.GigWorkerService;
+import aite.service.GigOrderService;
 
 import aite.model.WorkerModel;
+import aite.model.RequestModel;
 import aite.model.TaskModel;
+import aite.model.OrderModel;
 
 import aite.service.ERRORCODE;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/logout"})
+@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/user/orders", "/user/comments", "/logout"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
     private GigWorkerService workerService = new GigWorkerService();
     private GigTaskService taskService = new GigTaskService();
+    private GigOrderService orderService = new GigOrderService();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -53,6 +57,10 @@ public class UserServlet extends HttpServlet {
         getService(request, response);
       } else if (request.getRequestURI().endsWith("/user/chpwd") && uid > 0) {
         getChpwd(request, response);
+      } else if (request.getRequestURI().endsWith("/user/orders") && uid > 0) {
+        getOrders(request, response);
+      } else if (request.getRequestURI().endsWith("/user/comments") && uid > 0) {
+        getComments(request, response);
       } else if (request.getRequestURI().endsWith("/logout")) {
         doLogout(request, response);
       } else {
@@ -93,6 +101,18 @@ public class UserServlet extends HttpServlet {
       request.setAttribute("defaultEnabled", String.valueOf(n.enabled));
       request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
     }
+    protected void getOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      System.out.println("GET: /user/orders");
+      ArrayList<OrderModel> oList = orderService.getOrderList(accessToken);
+      request.setAttribute("orderList", oList);
+      request.getRequestDispatcher("/WEB-INF/view/orders.jsp").forward(request, response);
+    }
+    protected void getComments(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("GET: /user/comments");
+      request.getRequestDispatcher("/WEB-INF/view/comments.jsp").forward(request, response);
+    }
+    
 	/**
 	 * @see HttpServlet#doPost(HttpServlRequest request, HttpServletResponse response)
 	 */

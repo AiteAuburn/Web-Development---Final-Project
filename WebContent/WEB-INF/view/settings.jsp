@@ -28,7 +28,7 @@
           <a href="${pageContext.request.contextPath}/user/tasks">My Tasks</a>
         </li>
         <li>
-          <a href="${pageContext.request.contextPath}/user/history">Order History</a>
+          <a href="${pageContext.request.contextPath}/user/orders">Order History</a>
         </li>
         <li>
           <a href="${pageContext.request.contextPath}/user/comments">My Comments</a>
