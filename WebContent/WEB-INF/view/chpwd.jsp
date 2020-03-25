@@ -8,8 +8,8 @@
   </head>
   <body>
     <div class="container">
-      <a href="javascript: window.history.go(-1);"><h1>&larr;</h1></a>
-      <h1 class="page-title">Change Password</h1>
+      <h1><a href="javascript: window.history.go(-1);">&larr;</a></h1>
+      <h1 class="page-title"></h1>
       <form action="${pageContext.request.contextPath}/user/chpwd" method="post">
         <h5 class="label">Old Password</h5>
         <input type="text" name="oldpwd" placeholder="Old Password" >

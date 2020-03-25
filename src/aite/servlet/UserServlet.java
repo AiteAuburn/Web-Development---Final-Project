@@ -14,7 +14,6 @@ import aite.service.GigWorkerService;
 import aite.service.GigOrderService;
 
 import aite.model.WorkerModel;
-import aite.model.RequestModel;
 import aite.model.TaskModel;
 import aite.model.OrderModel;
 
@@ -22,7 +21,7 @@ import aite.service.ERRORCODE;
 /**
  * Servlet implementation class UserServlet
  */
-@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/user/orders", "/user/comments", "/logout"})
+@WebServlet({"/login", "/register", "/settings", "/user/chpwd", "/user/service", "/user/tasks", "/user/newTask", "/user/orders", "/user/orders/review", "/user/comments", "/logout"})
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UserService userService = new UserService();
@@ -43,6 +42,7 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
+      request.setAttribute("uid", uid);
       if (request.getRequestURI().endsWith("/login")) {
         getLogin(request, response);
       } else if (request.getRequestURI().endsWith("/register")) {
@@ -102,11 +102,31 @@ public class UserServlet extends HttpServlet {
       request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
     }
     protected void getOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       System.out.println("GET: /user/orders");
-      ArrayList<OrderModel> oList = orderService.getOrderList(accessToken);
-      request.setAttribute("orderList", oList);
-      request.getRequestDispatcher("/WEB-INF/view/orders.jsp").forward(request, response);
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      int oid = -1;
+      try {
+        oid = Integer.parseInt(request.getParameter("oid"));
+      }
+      catch (Exception e)
+      {
+      }
+      
+      if(oid == -1) {
+        ArrayList<OrderModel> oList = orderService.getOrderList(accessToken);
+        request.setAttribute("orderList", oList);
+        request.getRequestDispatcher("/WEB-INF/view/orders.jsp").forward(request, response);
+      } else {
+
+        OrderModel order = orderService.getOrder(accessToken, oid);
+        if(order == null) {
+          request.getRequestDispatcher("/WEB-INF/view/page404.jsp").forward(request, response);
+        } else {
+          request.setAttribute("order", order);
+          request.getRequestDispatcher("/WEB-INF/view/order_detail.jsp").forward(request, response);
+        }
+      }
+      
     }
     protected void getComments(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       System.out.println("GET: /user/comments");
@@ -117,6 +137,9 @@ public class UserServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServlRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      int uid = userService.getUIDbyToken(accessToken);
+      request.setAttribute("uid", uid);
 		if (request.getRequestURI().endsWith("/login")) {
 		  doLogin(request, response);
 		} else if (request.getRequestURI().endsWith("/register")) {
@@ -127,7 +150,9 @@ public class UserServlet extends HttpServlet {
           newTask(request, response);
         } else if (request.getRequestURI().endsWith("/user/chpwd")) {
           changePwd(request, response);
-		} else {
+		} else if (request.getRequestURI().endsWith("/user/orders/review")) {
+          submitReview(request, response);
+        } else {
 		  response.sendRedirect(request.getContextPath());
 		}
 	}
@@ -210,6 +235,24 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/chpwd.jsp").forward(request, response);
       }
     }
+	private void submitReview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String accessToken = (String) request.getSession().getAttribute("accessToken"); 
+      String output;
+      String oid = request.getParameter("oid");
+      String ratings = request.getParameter("ratings");
+      String comment = request.getParameter("comment");
+      int errorCode = orderService.submitReview(accessToken, oid, ratings, comment);
+      output = String.format("POST: /user/orders/review [%d]", errorCode);
+      System.out.println(output);
+      request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
+      if(errorCode == 0) {
+        response.sendRedirect(request.getContextPath() + "/user/orders?oid=" + oid);
+      } else {
+        request.getRequestDispatcher("/WEB-INF/view/order_detail.jsp").forward(request, response);
+      }
+    }
+	
+	
 	private void doRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String output;
       String username = request.getParameter("username");

@@ -10,8 +10,9 @@
   </head>
   <body>
     <div class="container">
-      <a href="${pageContext.request.contextPath}/settings"><h1>&larr;</h1></a>
-      <div class="taskList">
+      <h1><a href="${pageContext.request.contextPath}/settings">&larr;</a></h1>
+      <h1 class="page-title">Order History</h1>
+      <div class="ordereList">
       <%
       ArrayList<OrderModel> orderList = (ArrayList<OrderModel>) request.getAttribute("orderList");
       if(orderList != null) {
@@ -21,8 +22,9 @@
           Date date = formatter.parse(order.createTime);
           String time = new SimpleDateFormat("MMM dd, yyyy").format(date);
           String output = "";
-          output += "<div class='task'>";
-          output += "<div class='title'><a href='"+ request.getContextPath() +"/gigorder?tid="+ order.oid +"'>" + order.title + "</a></div>";
+          output += "<div class='order'>";
+          output += "<div class='title'><a href='"+ request.getContextPath() +"/user/orders?oid="+ order.oid +"'>" + order.title + "</a></div>";
+          output += "<div class='price'>$" + order.price + "</div>";
           output += "<div class='time'>" + time + "</div>";
           output += "</div>";
           out.print(output);

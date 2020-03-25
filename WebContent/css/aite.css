@@ -248,9 +248,6 @@ textarea {
 .request > .decision > button.decline{
   background-color: #F30000;
 }
-.taskList {
-  padding: 15px 0 15px 0;
-}
 
 .task {
   padding: 15px 0 15px 0;
@@ -372,10 +369,78 @@ textarea {
   color:  #ffa534;
   padding-right: 5px;
 }
-.worker_detail > .ratings > .score {
 
+.orderList {
+  padding: 15px 0 15px 0;
 }
 
+.order {
+  padding: 15px 0 15px 0;
+}
+.order > .title{
+  font-size: 24px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow:hidden;
+}
+
+.order > .price {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #666;
+}
+
+.order > .time {
+  font-size: 14px;
+}
+
+
+
+.order_detail {
+  padding-top: 15px;
+}
+.order_detail h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+.order_detail > .header > h2.title {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+.order_detail > .header img{
+  padding-right: 5px;
+  width: 16px;
+  height: 16px;
+}
+.order_detail > .header > .info {
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+.order_detail > .header > .info > h6 {
+  font-size: 20px;
+  margin:0;
+}
+.order_detail > .header > .info > .location{
+  padding-top:3px;
+  font-size: 14px;
+  color: #666;
+}
+.order_detail > .header > .info > .time {
+  font-size: 18px;
+  padding-top:3px;
+  color: #666;
+}
+.order_detail > .description {
+  padding-top: 5px;
+  padding-bottom: 15px;
+}
+
+.reviewText{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: 24px;
+  font-weight:bold;
+}
 a h1 {
   margin: 0;
 }

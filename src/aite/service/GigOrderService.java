@@ -1,12 +1,18 @@
 package aite.service;
 import aite.model.OrderModel;
-import aite.model.RequestModel;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import aite.service.ERRORCODE;
 public class GigOrderService extends Service{
-
+  public int submitReview(String accessToken, String oid, String ratings, String comment) {
+    int errorCode = 0;
+    int uid = getUIDbyToken(accessToken);
+    if( uid > 0 ) {
+    
+    } else {
+      errorCode = 1;
+    }
+    return errorCode;
+  }
   
   public OrderModel getOrder(String accessToken, int oid) {
     OrderModel order = null;
@@ -39,6 +45,7 @@ public class GigOrderService extends Service{
           order.workerName =  resultSet.getString("worker_name");
           order.title = resultSet.getString("title");
           order.price = resultSet.getFloat("price");
+          order.location = resultSet.getString("location");
           order.description = resultSet.getString("description");
           order.createTime = resultSet.getString("create_time");
           order.status = resultSet.getString("status");
@@ -78,6 +85,7 @@ public class GigOrderService extends Service{
           order.workerName =  resultSet.getString("worker_name");
           order.title = resultSet.getString("title");
           order.price = resultSet.getFloat("price");
+          order.location = resultSet.getString("location");
           order.description = resultSet.getString("description");
           order.createTime = resultSet.getString("create_time");
           order.status = resultSet.getString("status");
