@@ -14,7 +14,6 @@ public class Service{
 
   public int getUIDbyToken(String accessToken) {
     int uid = -1;
-    System.out.println("accessToken:" + accessToken);
     if(accessToken != null && accessToken.length() != 0) {
       try {
         Class.forName("com.mysql.jdbc.Driver");
@@ -33,7 +32,6 @@ public class Service{
         close();
       }
     }
-    System.out.println("uid: " + uid);
     return uid;
    
   }

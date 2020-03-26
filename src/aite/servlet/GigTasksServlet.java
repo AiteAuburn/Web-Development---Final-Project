@@ -138,7 +138,7 @@ public class GigTasksServlet extends HttpServlet {
       output = String.format("GET: /gigtasks/accept?tid=%s&aid=%s [%d]", tid, aid, errorCode);
       System.out.println(output);
       if(errorCode == 0) {
-        response.sendRedirect(String.format("%s/gigtasks?tid=%s", request.getContextPath(), tid));
+        response.sendRedirect(String.format("%s/user/orders", request.getContextPath(), tid));
       } else {
         response.sendRedirect(String.format("%s/gigtasks?tid=%s&errorCode=%d", request.getContextPath(), tid, errorCode));
       }

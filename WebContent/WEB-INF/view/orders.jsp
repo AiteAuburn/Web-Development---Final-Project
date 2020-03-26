@@ -20,7 +20,7 @@
           OrderModel order = orderList.get(i);
           DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
           Date date = formatter.parse(order.createTime);
-          String time = new SimpleDateFormat("MMM dd, yyyy").format(date);
+          String time = new SimpleDateFormat("HH:mm MMM dd, yyyy").format(date);
           String output = "";
           output += "<div class='order'>";
           output += "<div class='title'><a href='"+ request.getContextPath() +"/user/orders?oid="+ order.oid +"'>" + order.title + "</a></div>";

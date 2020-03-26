@@ -21,12 +21,13 @@ public class GigTaskService extends Service{
         connect = DriverManager.getConnection(connectionStr);
         connect.setAutoCommit(false);
         statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT a.apply_uid, t.title, t.description, t.location, a.quote FROM apply a LEFT JOIN task t ON a.tid = t.tid WHERE t.uid = ? AND a.aid = ? AND a.status = 'o' AND t.status = 'o'");
+        preparedStatement = connect.prepareStatement("SELECT a.apply_uid, t.title, t.description, t.location, a.quote, t.tid FROM apply a LEFT JOIN task t ON a.tid = t.tid WHERE t.uid = ? AND a.aid = ? AND a.status = 'o' AND t.status = 'o'");
         preparedStatement.setInt(1, uid);
         preparedStatement.setInt(2, aid);
         resultSet = preparedStatement.executeQuery();
         boolean requestExist = resultSet.next();
         if(requestExist) {
+          int tid = resultSet.getInt("tid");
           String title = resultSet.getString("title");
           String location = resultSet.getString("location");
           String description = resultSet.getString("description");
@@ -46,7 +47,14 @@ public class GigTaskService extends Service{
             preparedStatement.setInt(1, aid);
             result = preparedStatement.executeUpdate();
             if(result > 0) {
-              connect.commit();
+              preparedStatement = connect.prepareStatement("UPDATE task t SET status = 'e' WHERE tid = ?");
+              preparedStatement.setInt(1, tid);
+              result = preparedStatement.executeUpdate();
+              if(result > 0 ) {
+                connect.commit();
+              } else {
+                errorCode = ERRORCODE.ACCEPTOFFER_UPDATE_ERROR;
+              }
             } else {
               errorCode = ERRORCODE.ACCEPTOFFER_DELETE_ERROR;
             }

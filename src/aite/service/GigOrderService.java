@@ -189,7 +189,7 @@ public class GigOrderService extends Service{
             "ON o.worker_uid = u1.uid " + 
             "LEFT JOIN user u2 " + 
             "ON o.requester_uid = u2.uid " + 
-            "WHERE (o.requester_uid = ? OR o.worker_uid = ?)");
+            "WHERE (o.requester_uid = ? OR o.worker_uid = ?) ORDER BY o.create_time DESC");
         preparedStatement.setInt(1, uid);
         preparedStatement.setInt(2, uid);
         resultSet = preparedStatement.executeQuery();

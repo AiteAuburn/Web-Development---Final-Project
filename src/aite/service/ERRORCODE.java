@@ -76,6 +76,7 @@ public class ERRORCODE {
 
   public final static int ACCEPTREQUEST_ID_INVALID = 1001;
   public final static int ACCEPTREQUEST_DELETE_ERROR = 1002;
+  public final static int ACCEPTREQUEST_UPDATE_ERROR = 1002;
   public final static int ACCEPTREQUEST_INSERT_ERROR = 1003;
   public final static int ACCEPTREQUEST_EXCEPTION = 1004;
   public final static int ACCEPTREQUEST_UNAUTHORIED = 1005;
@@ -90,9 +91,10 @@ public class ERRORCODE {
 
   public final static int ACCEPTOFFER_ID_INVALID = 1201;
   public final static int ACCEPTOFFER_DELETE_ERROR = 1202;
-  public final static int ACCEPTOFFER_INSERT_ERROR = 1203;
-  public final static int ACCEPTOFFER_EXCEPTION = 1204;
-  public final static int ACCEPTOFFER_UNAUTHORIED = 1205;
+  public final static int ACCEPTOFFER_UPDATE_ERROR = 1203;
+  public final static int ACCEPTOFFER_INSERT_ERROR = 1204;
+  public final static int ACCEPTOFFER_EXCEPTION = 1205;
+  public final static int ACCEPTOFFER_UNAUTHORIED = 1206;
   
 
   public final static int REJECTOFFER_ID_INVALID = 1301;
@@ -196,6 +198,7 @@ public class ERRORCODE {
       
       put(ACCEPTOFFER_ID_INVALID, "Invalid ID!");
       put(ACCEPTOFFER_DELETE_ERROR, "Please try again later!");
+      put(ACCEPTOFFER_UPDATE_ERROR, "Please try again later!");
       put(ACCEPTOFFER_INSERT_ERROR, "Please try again later!");
       put(ACCEPTOFFER_EXCEPTION, "Please try again later!");
       put(ACCEPTOFFER_UNAUTHORIED, "UNAUTHORIZED!");
