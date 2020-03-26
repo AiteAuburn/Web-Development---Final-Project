@@ -4,7 +4,7 @@
 <html>
 	<head>
 	  <%@ include file="WEB-INF/meta.jsp" %>  
-		<title>Questions</title>
+		<title>Homepage</title>
 	</head>
 	<body>
     <div class="container">

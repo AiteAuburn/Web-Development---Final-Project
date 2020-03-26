@@ -35,7 +35,7 @@ public class GigWorkersServlet extends HttpServlet {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);
-      if(accessToken == null) {
+      if(uid < 1) {
         response.sendRedirect(request.getContextPath());
       } else {
         if (request.getRequestURI().endsWith("/gigworkers/accept")) {
@@ -93,9 +93,9 @@ public class GigWorkersServlet extends HttpServlet {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);
-      if (request.getRequestURI().endsWith("/request")) {
+      if (request.getRequestURI().endsWith("/request") && uid > 0) {
         doApply(request, response);
-      } else if (request.getRequestURI().endsWith("/request_cancel")) {
+      } else if (request.getRequestURI().endsWith("/request_cancel") && uid > 0) {
         doCancel(request, response);
       } else {
         doGet(request, response);

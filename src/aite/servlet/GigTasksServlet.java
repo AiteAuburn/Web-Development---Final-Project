@@ -39,7 +39,7 @@ public class GigTasksServlet extends HttpServlet {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
 	  int uid = userService.getUIDbyToken(accessToken);
 	  request.setAttribute("uid", uid);
-	  if(accessToken == null) {
+	  if (uid < 1) {
 	    response.sendRedirect(request.getContextPath());
 	  } else {
 	    if (request.getRequestURI().endsWith("/gigtasks/accept")) {
@@ -94,9 +94,9 @@ public class GigTasksServlet extends HttpServlet {
       String accessToken = (String) request.getSession().getAttribute("accessToken"); 
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);
-	  if (request.getRequestURI().endsWith("/apply")) {
+	  if (request.getRequestURI().endsWith("/apply") && uid > 0) {
         doApply(request, response);
-      } else if (request.getRequestURI().endsWith("/apply_cancel")) {
+      } else if (request.getRequestURI().endsWith("/apply_cancel") && uid > 0) {
         doCancel(request, response);
       } else {
         doGet(request, response);

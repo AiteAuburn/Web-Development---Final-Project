@@ -17,6 +17,7 @@ import aite.model.WorkerModel;
 import aite.model.TaskModel;
 import aite.model.OrderModel;
 import aite.model.CommentModel;
+import aite.model.LoginModel;
 
 import aite.service.ERRORCODE;
 /**
@@ -45,7 +46,11 @@ public class UserServlet extends HttpServlet {
       int uid = userService.getUIDbyToken(accessToken);
       request.setAttribute("uid", uid);
       if (request.getRequestURI().endsWith("/login")) {
-        getLogin(request, response);
+        if(uid > 0) {
+          response.sendRedirect(request.getContextPath() + "/gigworkers");
+        } else {
+          getLogin(request, response);
+        }
       } else if (request.getRequestURI().endsWith("/register")) {
         getRegister(request, response);
       } else if (request.getRequestURI().endsWith("/settings") && uid > 0) {
@@ -62,7 +67,7 @@ public class UserServlet extends HttpServlet {
         getOrders(request, response);
       } else if (request.getRequestURI().endsWith("/user/comments") && uid > 0) {
         getComments(request, response);
-      } else if (request.getRequestURI().endsWith("/announcement")) {
+      } else if (request.getRequestURI().endsWith("/announcement") && uid > 0) {
         getAnnouncements(request, response);
       } else if (request.getRequestURI().endsWith("/logout")) {
         doLogout(request, response);
@@ -227,12 +232,13 @@ public class UserServlet extends HttpServlet {
       String output;
       String username = request.getParameter("username");
       String pwd = request.getParameter("pwd");
-      int errorCode = userService.login(username, pwd);
-      output = String.format("POST: /login [%d] | username: %s, password: %s", errorCode, username, pwd);
+      LoginModel login = userService.login(username, pwd);
+      int errorCode = login.errorCode;
+      output = String.format("POST: /login [%d] | username: %s accessToken: %s", errorCode, username, login.accessToken);
       System.out.println(output);
       request.setAttribute("errorMsg", ERRORCODE.getMsg(errorCode));
       if(errorCode == 0) {
-        request.getSession().setAttribute("accessToken","123");
+        request.getSession().setAttribute("accessToken", login.accessToken);
         response.sendRedirect(request.getContextPath() + "/gigworkers");
       } else {
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);

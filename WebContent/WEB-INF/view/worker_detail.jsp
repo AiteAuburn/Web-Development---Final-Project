@@ -37,7 +37,7 @@
         </div>
         <div class="description">
 	        <h3 class="title"><%= service.title %></h3>
-	        <p><%= service.description %></p>
+	        <pre><%= service.description %></pre>
         </div>
         <div class="ratings row">
           <h3 class="title">Ratings</h3>
@@ -55,7 +55,7 @@
             <h5 class="label">Price: $<%= service.price %></h5>
             <h5 class="label">Location: <%= service.requestLocation %></h5>
             <h5 class="label">Description</h5>
-            <%= service.requestDescription %>
+            <pre><%= service.requestDescription %></pre>
             <input type="hidden" name="sid" value="<%= service.sid%>"/>
 	          <input type="submit" value="Cancel Request"/>
 	        </form>

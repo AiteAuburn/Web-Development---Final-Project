@@ -16,7 +16,6 @@
 	}
 	String errorMsg = ERRORCODE.getMsg(errorCode);
 	String action = request.getContextPath() + "/gigtasks/apply";
-	System.out.println("taskStatus: " + task.applyStatus);
 	if( task.applyStatus != null && task.applyStatus.equalsIgnoreCase("o")){
 	  action = request.getContextPath() + "/gigtasks/apply_cancel";
 	}
@@ -45,7 +44,7 @@
           <h3>Title</h3>
           <p><%= task.title %></p>
 	        <h3>Brief Description</h3>
-	        <p><%= task.description %></p>
+	        <pre><%= task.description %></pre>
         </div>
         <% if ( uid != task.uid) { %>
         <form action="<%= action %>" method="post">

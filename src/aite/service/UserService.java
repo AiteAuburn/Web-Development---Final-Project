@@ -3,6 +3,7 @@ import aite.model.WorkerModel;
 import aite.model.OrderModel;
 import aite.model.TaskModel;
 import aite.model.CommentModel;
+import aite.model.LoginModel;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import aite.service.ERRORCODE;
@@ -126,27 +127,67 @@ public class UserService extends Service{
     }
     return errorCode;
   }
-  public int login(String username, String pwd) {
-    int errorCode = 0;
+  public String getAlphaNumericString(int n) 
+  { 
+
+      // chose a Character random from this String 
+      String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                  + "0123456789"
+                                  + "abcdefghijklmnopqrstuvxyz"; 
+
+      // create StringBuffer size of AlphaNumericString 
+      StringBuilder sb = new StringBuilder(n); 
+
+      for (int i = 0; i < n; i++) { 
+
+          // generate a random number between 
+          // 0 to AlphaNumericString variable length 
+          int index 
+              = (int)(AlphaNumericString.length() 
+                      * Math.random()); 
+
+          // add Character one by one in end of sb 
+          sb.append(AlphaNumericString 
+                        .charAt(index)); 
+      } 
+
+      return sb.toString(); 
+  }
+  public LoginModel login(String username, String pwd) {
+    LoginModel login = new LoginModel();
 	try {
       Class.forName("com.mysql.jdbc.Driver");
 	  connect = DriverManager.getConnection(connectionStr);
 	  statement = connect.createStatement();
-	  preparedStatement = connect.prepareStatement("SELECT 1 from user WHERE username = ? and pwd = ? LIMIT 1");
+	  preparedStatement = connect.prepareStatement("SELECT uid from user WHERE username = ? and pwd = ? LIMIT 1");
 	  preparedStatement.setString(1, username);
 	  preparedStatement.setString(2, pwd);
 	  resultSet = preparedStatement.executeQuery();
-	  boolean result = resultSet.next();
-	  if(!result) {
-	    errorCode = ERRORCODE.LOGIN_FAILED;
+	  boolean loginSuccess = resultSet.next();
+	  if(!loginSuccess) {
+	    login.errorCode = ERRORCODE.LOGIN_FAILED;
+	  } else {
+	    int uid = resultSet.getInt("uid");
+	    preparedStatement = connect.prepareStatement("UPDATE token SET expired = 1 WHERE uid = ?");
+	    preparedStatement.setInt(1, uid);
+	    preparedStatement.executeUpdate();
+	    preparedStatement = connect.prepareStatement("INSERT INTO token (access_token, uid, expired) VALUES (?, ?, ?)");
+	    String accessToken = getAlphaNumericString(255);
+        preparedStatement.setString(1, accessToken);
+        preparedStatement.setInt(2, uid);
+        preparedStatement.setInt(3, 0);
+        int result = preparedStatement.executeUpdate();
+        if(result > 0) {
+          login.accessToken = accessToken;
+        }
 	  }
 	} catch (Exception e) {
-      errorCode = ERRORCODE.LOGIN_EXCEPTION;
+	  login.errorCode = ERRORCODE.LOGIN_EXCEPTION;
 	  System.out.println(e);
 	} finally {
 	  close();
 	}
-	return errorCode;
+	return login;
   }
   public int register(String username, String pwd, String fname, String lname) {
     int errorCode = 0;

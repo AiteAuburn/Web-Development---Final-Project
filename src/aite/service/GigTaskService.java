@@ -122,14 +122,14 @@ public class GigTaskService extends Service{
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection(connectionStr);
         statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT aid, fname, lname, quote, a.create_time FROM task t LEFT JOIN apply a ON t.tid = a.tid LEFT JOIN user u ON a.apply_uid = u.uid WHERE t.tid = ? AND t.uid = ? AND a.status ='o'");
+        preparedStatement = connect.prepareStatement("SELECT aid, CONCAT(fname, ' ', lname) as name, quote, a.create_time FROM task t LEFT JOIN apply a ON t.tid = a.tid LEFT JOIN user u ON a.apply_uid = u.uid WHERE t.tid = ? AND t.uid = ? AND a.status ='o'");
         preparedStatement.setInt(1, tid);
         preparedStatement.setInt(2, uid);
         resultSet = preparedStatement.executeQuery();
         while(resultSet.next()) {
           ApplyModel apply = new ApplyModel();
           apply.aid = resultSet.getInt("aid");
-          apply.name = resultSet.getString("fname") + resultSet.getString("lname");
+          apply.name = resultSet.getString("name");
           apply.quote = resultSet.getFloat("quote");
           apply.createTime = resultSet.getString("create_time"); 
           result.add(apply);
@@ -336,7 +336,7 @@ public class GigTaskService extends Service{
         connect = DriverManager.getConnection(connectionStr);
         statement = connect.createStatement();
         preparedStatement = connect.prepareStatement(
-            "SELECT t.tid, t.uid, fname, lname, title, location, description, t.create_time, a.status as applyStatus, a.quote " + 
+            "SELECT t.tid, t.uid, CONCAT(fname, ' ', lname) as name, title, location, description, t.create_time, a.status as applyStatus, a.quote " + 
             "FROM task t " + 
             "LEFT JOIN user u " + 
             "ON t.uid = u.uid " + 
@@ -351,7 +351,7 @@ public class GigTaskService extends Service{
           task = new TaskModel();
           task.tid = resultSet.getInt("tid");
           task.uid = resultSet.getInt("uid");
-          task.name = resultSet.getString("fname") + resultSet.getString("lname");
+          task.name = resultSet.getString("name");
           task.title = resultSet.getString("title");
           task.location = resultSet.getString("location");
           task.quote = resultSet.getFloat("quote");
@@ -374,13 +374,13 @@ public class GigTaskService extends Service{
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT tid, t.uid, lname, fname, title, create_time from task t, user u WHERE t.uid = u.uid AND status = 'o' ORDER BY create_time DESC");
+      preparedStatement = connect.prepareStatement("SELECT tid, t.uid, CONCAT(fname, ' ', lname) as name, title, create_time from task t, user u WHERE t.uid = u.uid AND status = 'o' ORDER BY create_time DESC");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
         TaskModel task = new TaskModel();
         task.tid = resultSet.getInt("tid");
         task.uid = resultSet.getInt("uid");
-        task.name = resultSet.getString("fname") + resultSet.getString("lname");
+        task.name = resultSet.getString("name");
         task.title = resultSet.getString("title");
         task.createTime = resultSet.getString("create_time");
         result.add(task);

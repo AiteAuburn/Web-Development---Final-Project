@@ -290,7 +290,7 @@ public class GigWorkerService extends Service{
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection(connectionStr);
         statement = connect.createStatement();
-        preparedStatement = connect.prepareStatement("SELECT s.uid, r.status as requestStatus, r.location as requestLocation, r.description as requestDescription, rid, fname, lname, title, s.price, s.description, enabled, SUM(ratings)/COUNT(ratings) as ratings from service s " + 
+        preparedStatement = connect.prepareStatement("SELECT s.uid, r.status as requestStatus, r.location as requestLocation, r.description as requestDescription, rid, CONCAT(fname, ' ', lname) as name, title, s.price, s.description, enabled, SUM(ratings)/COUNT(ratings) as ratings from service s " + 
             "LEFT JOIN comment c " + 
             "ON c.to_uid = s.uid " + 
             "LEFT JOIN user u " + 
@@ -308,7 +308,7 @@ public class GigWorkerService extends Service{
           worker.rid =  resultSet.getInt("rid");
           worker.uid =  resultSet.getInt("uid");
           worker.title = resultSet.getString("title");
-          worker.name = resultSet.getString("fname") + resultSet.getString("lname");
+          worker.name = resultSet.getString("name");
           worker.price = resultSet.getFloat("price");
           worker.description = resultSet.getString("description");
           worker.ratings = resultSet.getFloat("ratings");
@@ -331,12 +331,12 @@ public class GigWorkerService extends Service{
       Class.forName("com.mysql.jdbc.Driver");
       connect = DriverManager.getConnection(connectionStr);
       statement = connect.createStatement();
-      preparedStatement = connect.prepareStatement("SELECT sid, lname, fname, title, price, description, enabled, SUM(ratings)/COUNT(ratings) as ratings FROM service s, user u LEFT JOIN comment c ON c.to_uid = u.uid WHERE u.uid = s.uid AND enabled = 1 GROUP BY u.uid ORDER BY s.sid DESC");
+      preparedStatement = connect.prepareStatement("SELECT sid, CONCAT(fname, ' ', lname) as name, title, price, description, enabled, SUM(ratings)/COUNT(ratings) as ratings FROM service s, user u LEFT JOIN comment c ON c.to_uid = u.uid WHERE u.uid = s.uid AND enabled = 1 GROUP BY u.uid ORDER BY s.sid DESC");
       resultSet = preparedStatement.executeQuery();
       while(resultSet.next()) {
         WorkerModel worker = new WorkerModel();
         worker.sid = resultSet.getInt("sid");
-        worker.name = resultSet.getString("fname") + resultSet.getString("lname");
+        worker.name = resultSet.getString("name");
         worker.title = resultSet.getString("title");
         worker.ratings = resultSet.getFloat("ratings");
         worker.price = resultSet.getFloat("price");
