@@ -27,7 +27,16 @@
             <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
             <div class="info">
               <div class="name"><%= comment.reviewer %></div>
-              <div class="ratings"><span class="star">&#x2605</span> <%= comment.ratings %></div>
+              <div class="ratings">
+              <% 
+                for( int j = 0; j < 5; j++ ) {
+                  if (j < comment.ratings)
+                    out.println("<span class=\"star\">&#x2605</span>");
+                  else
+                    out.println("<span class=\"star\">&#x2606</span>");
+                }
+              %>
+              </div>
               <div class="time"><%= time %></div>
             </div>
           </div>
