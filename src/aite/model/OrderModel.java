@@ -14,8 +14,8 @@ public class OrderModel {
   public String createTime;
   public int workerReviewRatings = -1;
   public String workerReview = "";
-  public String workerReviewTime;
+  public String workerReviewTime = "";
   public int requesterReviewRatings = -1;
   public String requesterReview = "";
-  public String requesterReviewTime;
+  public String requesterReviewTime = "";
 }

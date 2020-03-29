@@ -155,6 +155,8 @@ public class GigOrderService extends Service{
             order.requesterReviewRatings = resultSet.getInt("ratings");
             order.requesterReview = resultSet.getString("comment");
             order.requesterReviewTime = resultSet.getString("create_time");
+          } else {
+            order.requesterReviewRatings = -1;
           }
           preparedStatement = connect.prepareStatement("SELECT ratings, comment, create_time FROM comment WHERE oid = ? AND from_uid = ? LIMIT 1");
           preparedStatement.setInt(1, oid);
@@ -165,6 +167,8 @@ public class GigOrderService extends Service{
             order.workerReviewRatings = resultSet.getInt("ratings");
             order.workerReview = resultSet.getString("comment");
             order.workerReviewTime = resultSet.getString("create_time");
+          } else {
+            order.workerReviewRatings = -1;
           }
         }
       } catch (Exception e) {

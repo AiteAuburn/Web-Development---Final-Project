@@ -62,28 +62,29 @@
 	          <h2>Order Completed!</h2>
 	        </div>
 	       <hr />
-	      <% } else {%>
-         <hr />
-          <div class="text-center">
-            <h2> Waiting for his/her review</h2>
-          </div>
-         <hr />
-	      
-	      <% } %>
-          <% if(order.workerReviewRatings != -1) {
+	       <% if(order.workerReviewRatings != -1) {
           Date date = formatter.parse(order.requesterReviewTime);
           String time = new SimpleDateFormat("HH:mm MMM dd, yyyy").format(date);%>
-	          <div class="review">
-	            <div class="header row">
-		            <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
-		            <div class="info">
-			            <div class="name"><%= order.workerName %></div>
-                  <div class="ratings"><span class="star">&#x2605</span> <%= order.workerReviewRatings %></div>
+            <div class="review">
+              <div class="header row">
+                <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
+                <div class="info">
+                  <div class="name"><%= order.workerName %></div>
+                  <div class="ratings">
+                  <% 
+                    for( int i = 0; i < 5; i++ ) {
+                      if(i < order.workerReviewRatings)
+                        out.println("<span class=\"star\">&#x2605</span>");
+                      else
+                        out.println("<span class=\"star\">&#x2606</span>");
+                    }
+                  %>
+                  </div>
                   <div class="time"><%= time %></div>
-		            </div>
-		          </div>
+                </div>
+              </div>
               <div class="comment"><%= order.workerReview %></div>
-	          </div>
+            </div>
           <% }%>
           <% if(order.requesterReviewRatings != -1) {
           Date date = formatter.parse(order.requesterReviewTime);
@@ -93,13 +94,31 @@
                 <div class="avatar"><img src='${pageContext.request.contextPath}/img/avatar.png' /></div>
                 <div class="info">
                   <div class="name"><%= order.requesterName %></div>
-                  <div class="ratings"><span class="star">&#x2605</span> <%= order.requesterReviewRatings %></div>
+                  <div class="ratings">
+                  <% 
+                    for( int i = 0; i < 5; i++ ) {
+                      if(i < order.requesterReviewRatings)
+                        out.println("<span class=\"star\">&#x2605</span>");
+                      else
+                        out.println("<span class=\"star\">&#x2606</span>");
+                    }
+                  %>
+                  </div>
                   <div class="time"><%= time %></div>
                 </div>
               </div>
               <div class="comment"><%= order.requesterReview %></div>
             </div>
           <% }%>
+	      <% } else {%>
+         <hr />
+          <div class="text-center">
+            <h2> Waiting for his/her review</h2>
+          </div>
+         <hr />
+	      
+	      <% } %>
+          
         <% }%>
     </div>
   </body>
