@@ -31,7 +31,7 @@ CREATE TABLE `orders` (
   `price` float NOT NULL,
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `location` varchar(200) NOT NULL DEFAULT 'Not known',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -41,7 +41,7 @@ CREATE TABLE `request` (
   `sid` int(11) NOT NULL,
   `request_uid` int(11) NOT NULL,
   `price` float NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `location` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -51,7 +51,7 @@ CREATE TABLE `request` (
 CREATE TABLE `service` (
   `sid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` float NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `enabled` tinyint(1) NOT NULL
@@ -71,8 +71,8 @@ INSERT INTO `service` (`sid`, `uid`, `title`, `price`, `description`, `enabled`)
 CREATE TABLE `task` (
   `tid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `location` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'o'

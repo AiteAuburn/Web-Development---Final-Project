@@ -296,7 +296,7 @@ public class GigWorkerService extends Service{
             "LEFT JOIN user u " + 
             "ON s.uid = u.uid " + 
             "LEFT JOIN request r " + 
-            "ON r.request_uid = ? " + 
+            "ON r.request_uid = ? AND r.sid = s.sid " + 
             "WHERE s.sid = ? LIMIT 1");
         preparedStatement.setInt(1, uid);
         preparedStatement.setInt(2, sid);

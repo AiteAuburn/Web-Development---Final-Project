@@ -107,11 +107,19 @@ public class UserServlet extends HttpServlet {
 	protected void getService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String accessToken = (String) request.getSession().getAttribute("accessToken"); 
 	  WorkerModel n = userService.getMyService(accessToken);
-      request.setAttribute("defaultTitle", n.title);
-      request.setAttribute("defaultPrice", String.valueOf(n.price));
-      request.setAttribute("defaultDescription", n.description);
-      request.setAttribute("defaultEnabled", String.valueOf(n.enabled));
-      request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
+	  if( n != null ) {
+        request.setAttribute("defaultTitle", n.title);
+        request.setAttribute("defaultPrice", String.valueOf(n.price));
+        request.setAttribute("defaultDescription", n.description);
+        request.setAttribute("defaultEnabled", String.valueOf(n.enabled));
+        request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
+	  } else {
+	    request.setAttribute("defaultTitle", "");
+	    request.setAttribute("defaultPrice", "0");
+	    request.setAttribute("defaultDescription", "");
+	    request.setAttribute("defaultEnabled", String.valueOf("true"));
+	    request.getRequestDispatcher("/WEB-INF/view/service.jsp").forward(request, response);
+	  }
     }
     protected void getOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       System.out.println("GET: /user/orders");
