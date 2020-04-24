@@ -1,20 +1,22 @@
 package aite.service;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-public class Service{
+
+public class Service {
   protected Connection connect = null;
   protected Statement statement = null;
   protected PreparedStatement preparedStatement = null;
   protected ResultSet resultSet = null;
-  protected String connectionStr = "jdbc:mysql://" + DBCONFIG.HOST + "/aite?"
-      + "user=" + DBCONFIG.USER + "&password=" + DBCONFIG.PWD;
+  protected String connectionStr = "jdbc:mysql://" + DBCONFIG.HOST + "/aite?" + "user=" + DBCONFIG.USER + "&password="
+      + DBCONFIG.PWD;
 
   public int getUIDbyToken(String accessToken) {
     int uid = -1;
-    if(accessToken != null && accessToken.length() != 0) {
+    if (accessToken != null && accessToken.length() != 0) {
       try {
         Class.forName("com.mysql.jdbc.Driver");
         connect = DriverManager.getConnection(connectionStr);
@@ -23,7 +25,7 @@ public class Service{
         preparedStatement.setString(1, accessToken);
         resultSet = preparedStatement.executeQuery();
         boolean success = resultSet.next();
-        if(success) {
+        if (success) {
           uid = resultSet.getInt("uid");
         }
       } catch (Exception e) {
@@ -33,8 +35,9 @@ public class Service{
       }
     }
     return uid;
-   
+
   }
+
   // You need to close the resultSet
   protected void close() {
     try {
@@ -46,8 +49,8 @@ public class Service{
       }
       if (connect != null) {
         connect.close();
-	  }
-	} catch (Exception e) {
-	}
+      }
+    } catch (Exception e) {
+    }
   }
 }
