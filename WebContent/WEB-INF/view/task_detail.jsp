@@ -1,8 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-    import="java.util.ArrayList, java.util.Date, java.text.DateFormat, java.text.SimpleDateFormat, aite.model.TaskModel, aite.model.ApplyModel, aite.service.ERRORCODE" 
-    
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.DateFormat"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="aite.model.TaskModel"%>
+<%@ page import="aite.model.ApplyModel"%>
+<%@ page import="aite.service.ERRORCODE"%>
 <%
 	TaskModel task = (TaskModel) request.getAttribute("task");
   int uid = (int) request.getAttribute("uid");
@@ -20,7 +23,7 @@
 	  action = request.getContextPath() + "/gigtasks/apply_cancel";
 	}
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
   <head>
     <%@ include file="../meta.jsp" %>  
@@ -60,11 +63,9 @@
 	          <input type="hidden" name="action" value="apply">
 	          <input type="submit" value="Send Offer"/>
 	        <% } %>
-          <% 
-          if(errorMsg != null && errorMsg.length() > 0) {
-            out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
-          }
-          %>
+	        <% if (errorMsg != null && errorMsg.length() > 0) { %>
+            <div class="errorMsg"><%=errorMsg%></div>
+          <% } %>
         </form>
         
         <% } else { %>
@@ -93,11 +94,9 @@
 			        }
 			      }
 			    %>
-          <% 
-          if(errorMsg != null && errorMsg.length() > 0) {
-            out.println(String.format("<div class=\"errorMsg\">%s</div>", errorMsg));
-          }
-          %>
+          <% if (errorMsg != null && errorMsg.length() > 0) { %>
+            <div class="errorMsg"><%=errorMsg%></div>
+          <% } %>
         <% } %>
       </div>
     </div>

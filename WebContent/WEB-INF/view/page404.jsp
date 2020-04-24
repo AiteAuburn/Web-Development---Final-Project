@@ -1,15 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
-  <head>
-    <%@ include file="../meta.jsp" %>  
-    <title>Page Not Found</title>
-  </head>
-  <body>
-    <div class="container">
-      <a href="javascript:history.back()"><h1>&larr;</h1></a>
-      <h1 class="page-title">Page Not Found</h1>
-    </div>
-  </body>
+	<head>
+		<%@ include file="../meta.jsp"%>
+		<title>Page Not Found</title>
+	</head>
+	<body>
+		<div class="container">
+			<h1>
+				<a href="javascript:history.back()">&larr;</a>
+			</h1>
+			<h1 class="page-title">Page Not Found</h1>
+		</div>
+	</body>
 </html>
