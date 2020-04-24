@@ -1,4 +1,6 @@
 ## Project
+### DEMO
+[https://www.youtube.com/watch?v=mdcjMwWi5ZU](https://www.youtube.com/watch?v=mdcjMwWi5ZU)
 #### INTRODUCTION
 As the emergence of mobile devices and advances in geo-positioning capabilities, location-based services are ubiquitous in our lives. Most current platforms, such as Uber, Lyft, DoorDash, indeed provide excellent platforms for rideshare and food delivery but fail to extend the platform to all walks of life. There is a huge amount of gig economy freelancers that could have been exerted their own expertise to earn extra money during their free time but no such platforms provide connections between gig workers and demand requesters. Therefore, we aim to build a prototype application that extends the platform not limited to food delivery or rideshare but covering all walks of life. 
 
